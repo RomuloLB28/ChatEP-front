@@ -1,0 +1,257 @@
+.page {
+  min-height: 100vh;
+  background-color: #19135F; /* azul do TCC */
+  font-family: "Karla", sans-serif;
+  color: white;
+  overflow-x: auto; /* permite rolagem lateral */
+}
+.main h1, 
+.main h2, 
+.section h1, 
+.section h2 {
+  font-size: 38px;
+  line-height: 1.2;
+  font-weight: bold;
+}
+
+.main p, 
+.section p {
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #19135F;
+  padding: 1rem 2rem;
+}
+
+.logo h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.nav {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.login {
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  border: none;
+  font-size: 1rem;
+}
+
+.login:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.signup {
+  background: #ec0808; /* vermelho do TCC */
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.signup:hover {
+  background: #ff0000; /* vermelho mais escuro no hover */
+}
+
+/* MAIN */
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 3rem 2rem;
+}
+
+/* SECTIONS */
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 3rem 2rem;
+  background-color: #ffffff;
+  color: #111111;
+  position: relative;
+}
+
+.section::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%; /* controla o tamanho da linha */
+  height: 3px;
+  background-color: #e5e7eb; /* mesma cor do border-bottom */
+}
+
+/* Texto e imagem alternando */
+.textLeft,
+.textRight {
+  flex: 1;
+}
+
+.textLeft {
+  text-align: left;
+}
+
+.textRight {
+  text-align: right;
+}
+
+.imageLeft,
+.imageRight {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.section img,
+.main img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+/* BOTÃO "PRATICAR" */
+.practiceBtn {
+  margin-top: 1rem;
+  background: #ec0808; /* vermelho do TCC */
+  border: none;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.practiceBtn span {
+  font-weight: bold;
+}
+
+.practiceBtn:hover {
+  background: #ff0000; /* vermelho mais escuro no hover */
+}
+/* FOOTER */
+.footer {
+  background-color: #19135F; /* mesmo azul do header/main */
+  color: white;
+  text-align: center;
+  padding: 2rem 1rem;
+  margin-top: 2rem;
+}
+
+.footerContent {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.footerContent h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.footerSections {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap; /* responsivo */
+}
+
+.footerLeft,
+.footerCenter,
+.footerRight {
+  flex: 1;
+  min-width: 150px;
+}
+
+.footerLeft {
+  text-align: left;
+}
+
+.footerCenter {
+  text-align: center;
+}
+
+.footerRight {
+  text-align: right;
+}
+
+.footerSections p {
+  margin: 0.3rem 0;
+}
+
+.footerCopy {
+  font-size: 0.9rem;
+  color: #d1d5db; /* cinza clarinho */
+  margin-top: 1rem;
+}
+
+/* Classe genérica para círculo atrás da imagem */
+.circle {
+  position: relative; /* referência para o círculo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle::before {
+  content: "";
+  position: absolute;
+  width: 320px;   /* tamanho do círculo */
+  height: 320px;
+  background-color: #E8EAFF;
+  border-radius: 50%;
+  z-index: 1; /* atrás da imagem */
+}
+
+.circle img {
+  position: relative;
+  z-index: 2; /* imagem na frente */
+}
+
+.greenText {
+  background-color: #E0FF16;
+  display: inline-block;
+  padding: 2px 6px; /* ajusta o espaço dentro do retângulo */
+  line-height: 1.2; /* mantém alinhamento */
+  border-radius: 1rem;
+}

@@ -13,7 +13,8 @@ export default function SignupPage() {
           HELLO, <br /> WELCOME!
         </h2>
         <p className={styles.subtitle}>
-          Faça seu cadastro para ficar por dentro de todas as atualizações e novos recursos
+          Faça seu cadastro para ficar por dentro de todas as atualizações e
+          novos recursos
         </p>
       </div>
 
@@ -30,14 +31,14 @@ export default function SignupPage() {
             LOGIN
           </button>
           <Link href="home">
-            <button className={styles.voltar}>voltar para a tela inicial</button>
+            <button className={styles.voltar}>
+              voltar para a tela inicial
+            </button>
           </Link>
         </form>
 
         <div className={styles.divider}>OU</div>
-        <p className={styles.googleText}>Entre na sua conta usando o Google</p>
-        <LoginBtn>
-        </LoginBtn>
+        <LoginBtn></LoginBtn>
       </div>
     </div>
   );

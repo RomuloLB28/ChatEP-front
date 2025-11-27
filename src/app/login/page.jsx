@@ -1,5 +1,6 @@
 "use client";
 import styles from "./login.module.css";
+import { LoginBtn } from "../LoginBtn";
 import Link from "next/link";
 
 export default function LoginPage() {
@@ -30,16 +31,14 @@ export default function LoginPage() {
             LOGIN
           </button>
           <Link href="home">
-            <button className={styles.voltar}>Voltar para a tela inicial?</button>
+            <button className={styles.voltar}>
+              Voltar para a tela inicial?
+            </button>
           </Link>
         </form>
 
         <div className={styles.divider}>OU</div>
-        <p className={styles.googleText}>Entre na sua conta usando o Google</p>
-        <button className={styles.googleBtn}>
-          <img src="/google.svg" alt="Google" />
-          Continue with Google
-        </button>
+        <LoginBtn></LoginBtn>
       </div>
     </div>
   );

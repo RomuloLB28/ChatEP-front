@@ -35,9 +35,11 @@ export default function Home() {
             listening, usando transcrição automática e feedback simples para
             acelerar o aprendizado.
           </p>
-          <button className={styles.practiceBtn}>
-            Praticar <span>→</span>
-          </button>
+          <Link href="practice">
+            <button className={styles.practiceBtn}>
+              Praticar <span>→</span>
+            </button>
+          </Link>
         </div>
         <div className={styles.imageRight}>
           <img src="/images/main_image.png" alt="Imagem explicativa" />
@@ -49,15 +51,17 @@ export default function Home() {
         <div className={styles.textLeft}>
           <h2>
             Prátique seu <br />
-            <span className={styles.greenText}>Listeing</span>
+            <span className={styles.greenText}>Listening</span>
           </h2>
           <p>
             Pratique sua compreensão auditiva com exercícios variados e áudios
             reais, acompanhados de perguntas para fixar o conteúdo.
           </p>
-          <button className={styles.practiceBtn}>
-            Praticar <span>→</span>
-          </button>
+          <Link href="listening">
+            <button className={styles.practiceBtn}>
+              Praticar <span>→</span>
+            </button>
+          </Link>
         </div>
         <div className={`${styles.imageRight} ${styles.circle}`}>
           <img src="/images/Listening_image.png" alt="Imagem Listening" />
@@ -78,9 +82,11 @@ export default function Home() {
             Fale em inglês e receba transcrição automática e dicas de melhoria,
             ajudando você a ganhar confiança e fluência.
           </p>
-          <button className={styles.practiceBtn}>
-            Praticar <span>→</span>
-          </button>
+          <Link href="speaking">
+            <button className={styles.practiceBtn}>
+              Praticar <span>→</span>
+            </button>
+          </Link>
         </div>
       </section>
 
@@ -95,9 +101,11 @@ export default function Home() {
             Leia textos adaptados ao seu nível e aprimore seu vocabulário e
             interpretação de forma prática e guiada.
           </p>
-          <button className={styles.practiceBtn}>
-            Praticar <span>→</span>
-          </button>
+          <Link href="reading">
+            <button className={styles.practiceBtn}>
+              Praticar <span>→</span>
+            </button>
+          </Link>
         </div>
         <div className={`${styles.imageRight} ${styles.circle}`}>
           <img src="/images/Reading_image2.png" alt="Imagem Reading" />
@@ -118,9 +126,11 @@ export default function Home() {
             Produza textos curtos e receba sugestões de correção para evoluir
             sua gramática e clareza na escrita
           </p>
-          <button className={styles.practiceBtn}>
-            Praticar <span>→</span>
-          </button>
+          <Link href="writing">
+            <button className={styles.practiceBtn}>
+              Praticar <span>→</span>
+            </button>
+          </Link>
         </div>
       </section>
 

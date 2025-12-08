@@ -126,9 +126,11 @@ export default function Home() {
             Produza textos curtos e receba sugestões de correção para evoluir
             sua gramática e clareza na escrita
           </p>
-          <button className={styles.practiceBtn}>
-            Praticar <span>→</span>
-          </button>
+          <Link href="writing">
+            <button className={styles.practiceBtn}>
+              Praticar <span>→</span>
+            </button>
+          </Link>
         </div>
       </section>
 

@@ -1,13 +1,22 @@
+"use client";
+
 import styles from "./page.module.css";
 import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Home() {
+  const { data: session, status } = useSession();
+
+  const isLogged = status === "authenticated";
+
   return (
     <div className={styles.page}>
       {/* HEADER */}
       <header className={styles.header}>
         <div className={styles.logo}>
-          <h1>ChatEP</h1>
+          <Link href="/home">
+            <h1>ChatEP</h1>
+          </Link>
         </div>
 
         <nav className={styles.nav}>
@@ -17,16 +26,35 @@ export default function Home() {
         </nav>
 
         <div className={styles.actions}>
-          <Link href="login">
-            <button className={styles.login}>Login</button>
-          </Link>
-          <Link href="signup">
-            <button className={styles.signup}>Signup</button>
-          </Link>
+          {!isLogged ? (
+            <>
+              <Link href="/login">
+                <button className={styles.login}>Login</button>
+              </Link>
+              <Link href="/signup">
+                <button className={styles.signup}>Signup</button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/profile">
+                <button className={styles.profileBtn}>
+                  Olá, {session.user.name?.split(" ")[0]}
+                </button>
+              </Link>
+
+              <button
+                className={styles.logout}
+                onClick={() => signOut({ callbackUrl: "/" })}
+              >
+                Logout
+              </button>
+            </>
+          )}
         </div>
       </header>
 
-      {/* MAIN - Introdução (invertido) */}
+      {/* MAIN */}
       <main className={styles.main}>
         <div className={styles.textLeft}>
           <h2>Conheça o ChatEP</h2>
@@ -35,17 +63,18 @@ export default function Home() {
             listening, usando transcrição automática e feedback simples para
             acelerar o aprendizado.
           </p>
-          <Link href="practice">
+
+          <Link href={isLogged ? "/practice" : "/login"}>
             <button className={styles.practiceBtn}>
               Praticar <span>→</span>
             </button>
           </Link>
         </div>
+
         <div className={styles.imageRight}>
           <img src="/images/main_image.png" alt="Imagem explicativa" />
         </div>
       </main>
-
       {/* SECTION 1 - Listening */}
       <section className={styles.section}>
         <div className={styles.textLeft}>

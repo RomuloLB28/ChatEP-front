@@ -1,27 +1,49 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./writing.module.css";
 
 export default function WritingPage() {
   const [text, setText] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(null);
+  const [exercises, setExercises] = useState([]);
+
+  useEffect(() => {
+    async function loadWritingExercises() {
+      const res = await fetch("/exercises?type=writing");
+      const data = await res.json();
+      setExercises(data);
+    }
+
+    loadWritingExercises();
+  }, []);
+
+  if (exercises.length === 0) {
+    return <p>Carregando...</p>;
+  }
+
+  const exercise = exercises[0];
+  const { task, translations } = exercise;
+
+  const normalize = (str) => str.trim().toLowerCase();
 
   const handleSubmit = () => {
-    if (text.trim().length > 0) setSubmitted(true);
+    const correct = translations.some(
+      (t) => normalize(t) === normalize(text)
+    );
+
+    setIsCorrect(correct);
+    setSubmitted(true);
   };
 
   return (
     <div className={styles.container}>
-      {/* Caixa de instrução */}
+      {/* INSTRUÇÃO */}
       <div className={styles.textBox}>
-        <h2>Write an email in English</h2>
-        <p>
-          Requirements: slisoihqdouqshoduhasoudbasbdosbdososbosoubdsobdosbosbos
-          bosbsososboosbsbs.  
-        </p>
+        <p>{task}</p>
       </div>
 
-      {/* Caixa de texto */}
+      {/* TEXTO */}
       <textarea
         className={styles.textArea}
         placeholder="Digite aqui seu texto..."
@@ -30,7 +52,7 @@ export default function WritingPage() {
         disabled={submitted}
       />
 
-      {/* Botão */}
+      {/* BOTÃO */}
       <button
         className={styles.submitButton}
         onClick={handleSubmit}
@@ -39,10 +61,12 @@ export default function WritingPage() {
         {submitted ? "ENVIADO" : "ENVIAR"}
       </button>
 
-      {/* Feedback */}
+      {/* FEEDBACK */}
       {submitted && (
         <p className={styles.feedback}>
-          ✨ Texto enviado com sucesso!
+          {isCorrect
+            ? "✅ Resposta correta!"
+            : "❌ Resposta incorreta."}
         </p>
       )}
     </div>

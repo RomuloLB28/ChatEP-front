@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import styles from "./speaking.module.css";
 
 export default function SpeakingPage() {
@@ -7,6 +7,23 @@ export default function SpeakingPage() {
   const [audioUrl, setAudioUrl] = useState(null);
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
+  const [exercises, setExercises] = useState([]);
+
+  useEffect(() => {
+    async function loadSpeakingExercises(){
+      const res = await fetch('/exercises?type=speaking');
+      const data = await res.json();
+      setExercises(data);
+    }
+    loadSpeakingExercises();
+  }, []);
+
+  if (exercises.length === 0) {
+    return <p>Carregando...</p>;
+  }
+
+  const exercise = exercises[0];
+  const {prompt} = exercise;
 
   // Iniciar gravação
   const startRecording = async () => {
@@ -42,10 +59,8 @@ export default function SpeakingPage() {
   return (
     <div className={styles.container}>
       <div className={styles.textBox}>
-        <p>You know it's not the same as it was</p>
-        <p>As it was.</p>
+        <p>{prompt}</p>
       </div>
-
       <button
         className={`${styles.micButton} ${recording ? styles.recording : ""}`}
         onClick={recording ? stopRecording : startRecording}

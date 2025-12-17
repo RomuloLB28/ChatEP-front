@@ -1,32 +1,45 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./listening.module.css";
 
 export default function ListeningPage() {
   const [answer, setAnswer] = useState("");
+  const [exercises, setExercises] = useState([]);
 
-  // Exemplo de link de vídeo do YouTube (pode trocar por props ou query param)
-  const videoId = "qN4ooNx77u0"; // <- só o ID do vídeo do YouTube
-  const videoUrl = `https://www.youtube.com/embed/${videoId}`;
+  useEffect(() => {
+    async function loadListeningExercises() {
+      const res = await fetch("/exercises?type=listening");
+      const data = await res.json();
+      setExercises(data);
+    }
+
+    loadListeningExercises();
+  }, []);
+
+  const videoUrl =
+    exercises.length > 0
+      ? exercises[0].audioUrl.replace("watch?v=", "embed/")
+      : "";
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Resposta enviada:", answer);
-    // Aqui depois você pode comparar, salvar ou enviar para o backend
+    console.log("Resposta:", answer);
   };
 
   return (
     <div className={styles.listeningContainer}>
       <h1 className={styles.title}>Exercício de Listening</h1>
 
-      <div className={styles.videoWrapper}>
-        <iframe
-          src={videoUrl}
-          title="Listening Exercise"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      </div>
+      {videoUrl && (
+        <div className={styles.videoWrapper}>
+          <iframe
+            src={videoUrl}
+            title="Listening Exercise"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <input

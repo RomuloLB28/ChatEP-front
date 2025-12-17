@@ -1,64 +1,80 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./reading.module.css";
 
 export default function ReadingPage() {
   const [selected, setSelected] = useState(null);
   const [submitted, setSubmitted] = useState(false);
-  const correctAnswer = "C";
+  const [exercises, setExercises] = useState([]);
 
-  const handleSelect = (option) => {
-    if (!submitted) setSelected(option);
+  useEffect(() => {
+    async function loadReadingExercises() {
+      const res = await fetch("/exercises?type=reading");
+      const data = await res.json();
+      setExercises(data);
+    }
+
+    loadReadingExercises();
+  }, []);
+
+  if (exercises.length === 0) {
+    return <p>Carregando...</p>;
+  }
+
+  const exercise = exercises[0];
+  const { text, options, correctAnswer } = exercise;
+
+  const handleSelect = (index) => {
+    if (!submitted) setSelected(index);
   };
 
   const handleSubmit = () => {
-    if (selected) setSubmitted(true);
+    if (selected !== null) setSubmitted(true);
   };
 
   return (
     <div className={styles.container}>
+      {/* TEXTO */}
       <div className={styles.textBox}>
-        <p>
-          We would like to welcome you on website dedicated to all pupils,
-          students, parents, teachers and to all lovers of mathematics. You can
-          find here math exercises in the range of middle schools, high school
-          math problems and the most frequent university & college math
-          problems.
-        </p>
+        <p>{text}</p>
       </div>
 
+      {/* OPÇÕES */}
       <div className={styles.optionsBox}>
-        {["A", "B", "C", "D"].map((option) => (
-          <div
-            key={option}
-            className={`${styles.option} ${
-              selected === option ? styles.selected : ""
-            } ${
-              submitted && option === correctAnswer ? styles.correct : ""
-            } ${
-              submitted && selected === option && option !== correctAnswer
-                ? styles.wrong
-                : ""
-            }`}
-            onClick={() => handleSelect(option)}
+        {options.map((option, index) => (
+          <button
+            key={index}
+            type="button"
+            onClick={() => handleSelect(index)}
+            className={`${styles.option}
+              ${selected === index ? styles.selected : ""}
+              ${
+                submitted && index === correctAnswer ? styles.correct : ""
+              }
+              ${
+                submitted &&
+                selected === index &&
+                index !== correctAnswer
+                  ? styles.wrong
+                  : ""
+              }`}
+            disabled={submitted}
           >
-            <strong>{option})</strong>{" "}
-            {option === "A" && "suohsiuhiusgdisidsiv"}
-            {option === "B" && "iusdisdbsiudsuisissvus"}
-            {option === "C" && "ouwsudgowidgoiwgdouwg"}
-            {option === "D" && "isdhowhdouwdoubwdkjbwbd"}
-          </div>
+            <strong>{String.fromCharCode(65 + index)})</strong> {option}
+          </button>
         ))}
       </div>
 
+      {/* BOTÃO ENVIAR */}
       <button
         className={styles.submitButton}
         onClick={handleSubmit}
-        disabled={!selected || submitted}
+        disabled={selected === null || submitted}
       >
         {submitted ? "ENVIADO" : "ENVIAR"}
       </button>
 
+      {/* FEEDBACK */}
       {submitted && (
         <p className={styles.feedback}>
           {selected === correctAnswer

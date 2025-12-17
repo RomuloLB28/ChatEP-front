@@ -30,33 +30,43 @@
   gap: 1rem;
   width: 100%;
   max-width: 700px;
+  background-color: #1e3a8a;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
 }
 
 .option {
-  background-color: #1e3a8a;
-  color: white;
-  padding: 1rem;
-  border-radius: 12px;
-  font-weight: 600;
+  display: block;
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ccc;
+  background-color: #eff6ff;
+  color: #000000;
   cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: center;
 }
 
 .option:hover {
-  background-color: #2d4ed8;
+  background-color: #2563eb;
 }
 
 .selected {
-  border: 2px solid #facc15;
+  background-color: #2563eb;
 }
 
 .correct {
-  background-color: #16a34a !important;
+  background: #dcfce7;
+  background-color: #16a34a;
 }
 
 .wrong {
-  background-color: #dc2626 !important;
+  background: #fee2e2;
+  background-color: #dc2626;
+}
+
+.submitButton {
+  margin-top: 16px;
 }
 
 /* Botão */

@@ -37,6 +37,14 @@
   transition: border-color 0.2s ease;
 }
 
+.textArea:disabled {
+  background-color: #e5e7eb;
+  border-color: #9ca3af;
+  color: #374151;
+  opacity: 1;
+}
+
+
 .textArea:focus {
   border-color: #2d4ed8;
 }

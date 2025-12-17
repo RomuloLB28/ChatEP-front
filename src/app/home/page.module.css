@@ -55,7 +55,7 @@
   gap: 1rem;
 }
 
-.login {
+.login,.logout {
   background: transparent;
   border: 1px solid white;
   color: white;
@@ -66,7 +66,7 @@
   font-size: 1rem;
 }
 
-.login:hover {
+.login, .logout:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
@@ -254,4 +254,36 @@
   padding: 2px 6px; /* ajusta o espaço dentro do retângulo */
   line-height: 1.2; /* mantém alinhamento */
   border-radius: 1rem;
+}
+
+.actions {
+  display: flex;
+  align-items: center; /* 🔥 ESSENCIAL */
+  gap: 1rem;
+}
+
+.userName {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1;     /* 🔥 evita “afundar” o texto */
+  margin: 0;          /* segurança extra */
+  display: flex;      /* garante alinhamento */
+  align-items: center;
+}
+
+.profileBtn {
+  background: #ec0808; /* vermelho do TCC */
+  border: none;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.profileBtn:hover {
+  background: #ff0000;
 }

@@ -1,16 +1,23 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import styles from "./writing.module.css";
 
 export default function WritingPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
   const [text, setText] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(null);
+
   const [exercises, setExercises] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     async function loadWritingExercises() {
-      const res = await fetch("/exercises?type=writing");
+      const res = await fetch("http://localhost:4000/exercises?type=writing");
       const data = await res.json();
       setExercises(data);
     }
@@ -22,18 +29,51 @@ export default function WritingPage() {
     return <p>Carregando...</p>;
   }
 
-  const exercise = exercises[0];
-  const { task, translations } = exercise;
+  const exercise = exercises[currentIndex];
+  const { task, translations, _id, level } = exercise;
 
   const normalize = (str) => str.trim().toLowerCase();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (!session?.backendToken) return;
+
     const correct = translations.some(
       (t) => normalize(t) === normalize(text)
     );
 
+    const payload = {
+      exerciseId: _id,
+      type: "writing",
+      level,
+      userAnswer: text,
+      isCorrect: correct,
+      score: correct ? 1 : 0,
+    };
+
+    await fetch("http://localhost:4000/user-exercises", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.backendToken}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
     setIsCorrect(correct);
     setSubmitted(true);
+  };
+
+  const handleRetry = () => {
+    setText("");
+    setSubmitted(false);
+    setIsCorrect(null);
+  };
+
+  const handleNextExercise = () => {
+    setCurrentIndex((prev) => (prev + 1 < exercises.length ? prev + 1 : 0));
+    setText("");
+    setSubmitted(false);
+    setIsCorrect(null);
   };
 
   return (
@@ -48,25 +88,47 @@ export default function WritingPage() {
         className={styles.textArea}
         placeholder="Digite aqui seu texto..."
         value={text}
-        onChange={(e) => setText(e.target.value)}
         disabled={submitted}
+        onChange={(e) => setText(e.target.value)}
       />
 
-      {/* BOTÃO */}
-      <button
-        className={styles.submitButton}
-        onClick={handleSubmit}
-        disabled={text.trim().length === 0 || submitted}
-      >
-        {submitted ? "ENVIADO" : "ENVIAR"}
-      </button>
+      {/* BOTÕES */}
+      <div style={{ display: "flex", gap: "12px" }}>
+        {!submitted && (
+          <button
+            className={styles.submitButton}
+            onClick={handleSubmit}
+            disabled={text.trim().length === 0}
+          >
+            ENVIAR
+          </button>
+        )}
+
+        {submitted && (
+          <>
+            <button
+              className={styles.submitButton}
+              type="button"
+              onClick={handleRetry}
+            >
+              Refazer exercício
+            </button>
+
+            <button
+              className={styles.nextExercise}
+              type="button"
+              onClick={handleNextExercise}
+            >
+              Próximo exercício
+            </button>
+          </>
+        )}
+      </div>
 
       {/* FEEDBACK */}
       {submitted && (
         <p className={styles.feedback}>
-          {isCorrect
-            ? "✅ Resposta correta!"
-            : "❌ Resposta incorreta."}
+          {isCorrect ? "✅ Resposta correta!" : "❌ Resposta incorreta."}
         </p>
       )}
     </div>

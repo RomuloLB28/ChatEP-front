@@ -52,7 +52,6 @@ const handler = NextAuth({
     async session({ session, token }) {
       session.backendToken = token.backendToken;
       session.user.id = token.sub!;
-      console.log(`teste ${session.backendToken}`);
       return session;
     },
   },

@@ -1,0 +1,18 @@
+.wrapper {
+  min-height: 100vh;
+  background-color: #f3f4f6; /* cinza claro */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  background-color: #e5e7eb; /* cinza um pouco mais escuro */
+  padding: 32px 48px;
+  border-radius: 12px;
+  font-size: 20px;
+  font-weight: 500;
+  color: #374151;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}

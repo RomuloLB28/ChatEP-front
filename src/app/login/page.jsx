@@ -1,4 +1,5 @@
 "use client";
+
 import styles from "./login.module.css";
 import { LoginBtn } from "../LoginBtn";
 import Link from "next/link";
@@ -6,7 +7,7 @@ import Link from "next/link";
 export default function LoginPage() {
   return (
     <div className={styles.container}>
-      {/* Lado esquerdo */}
+      {/* Lado esquerdo - DESKTOP */}
       <div className={styles.left}>
         <h1 className={styles.logo}>ChatEP</h1>
         <h2 className={styles.title}>
@@ -20,6 +21,12 @@ export default function LoginPage() {
 
       {/* Lado direito */}
       <div className={styles.right}>
+
+        {/* TÍTULO MOBILE */}
+        <div className={styles.mobileHeader}>
+          <h1 className={styles.logo}>ChatEP</h1>
+        </div>
+
         <form className={styles.form}>
           <label className={styles.font}>EMAIL</label>
           <input type="email" placeholder="Ex: name@gmail.com" />
@@ -30,6 +37,7 @@ export default function LoginPage() {
           <button type="submit" className={styles.loginBtn}>
             LOGIN
           </button>
+
           <Link href="home">
             <button className={styles.voltar}>
               Voltar para a tela inicial?
@@ -38,7 +46,7 @@ export default function LoginPage() {
         </form>
 
         <div className={styles.divider}>OU</div>
-        <LoginBtn></LoginBtn>
+        <LoginBtn />
       </div>
     </div>
   );

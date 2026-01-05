@@ -44,13 +44,13 @@
   opacity: 1;
 }
 
-
 .textArea:focus {
   border-color: #2d4ed8;
 }
 
 /* Botão */
-.submitButton {
+.submitButton,
+.nextExercise {
   background-color: #dc2626;
   color: white;
   font-weight: 600;
@@ -59,6 +59,10 @@
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
+}
+
+.nextExercise {
+  background-color: #16a34a;
 }
 
 .submitButton:hover {

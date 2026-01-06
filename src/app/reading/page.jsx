@@ -1,11 +1,18 @@
 "use client";
+
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import styles from "./reading.module.css";
 
 export default function ReadingPage() {
+  const { data: session } = useSession();
+  const router = useRouter();
+
   const [selected, setSelected] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [exercises, setExercises] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     async function loadReadingExercises() {
@@ -21,15 +28,46 @@ export default function ReadingPage() {
     return <p>Carregando...</p>;
   }
 
-  const exercise = exercises[0];
-  const { text, options, correctAnswer } = exercise;
+  const exercise = exercises[currentIndex];
+  const { _id, text, options, correctAnswer, level } = exercise;
 
   const handleSelect = (index) => {
     if (!submitted) setSelected(index);
   };
 
-  const handleSubmit = () => {
-    if (selected !== null) setSubmitted(true);
+  const handleSubmit = async () => {
+    if (selected === null) return;
+
+    const isCorrect = selected === correctAnswer;
+    setSubmitted(true);
+
+    if (!session?.backendToken) {
+      console.warn("Usuário não autenticado");
+      return;
+    }
+
+    await fetch("https://chatep-back.onrender.com/user-exercises", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.backendToken}`,
+      },
+      body: JSON.stringify({
+        exerciseId: _id,
+        type: "reading",
+        level,
+        userAnswer: options[selected],
+        isCorrect,
+        score: isCorrect ? 1 : 0,
+      }),
+    });
+  };
+
+  const handleNextExercise = () => {
+    setSelected(null);
+    setSubmitted(false);
+
+    setCurrentIndex((prev) => (prev + 1 < exercises.length ? prev + 1 : 0));
   };
 
   return (
@@ -48,31 +86,34 @@ export default function ReadingPage() {
             onClick={() => handleSelect(index)}
             className={`${styles.option}
               ${selected === index ? styles.selected : ""}
+              ${submitted && index === correctAnswer ? styles.correct : ""}
               ${
-                submitted && index === correctAnswer ? styles.correct : ""
-              }
-              ${
-                submitted &&
-                selected === index &&
-                index !== correctAnswer
+                submitted && selected === index && index !== correctAnswer
                   ? styles.wrong
                   : ""
               }`}
             disabled={submitted}
           >
-            <strong>{String.fromCharCode(65 + index)})</strong> {option}
+            <strong>{String.fromCharCode(65 + index)}</strong> {option}
           </button>
         ))}
       </div>
 
-      {/* BOTÃO ENVIAR */}
-      <button
-        className={styles.submitButton}
-        onClick={handleSubmit}
-        disabled={selected === null || submitted}
-      >
-        {submitted ? "ENVIADO" : "ENVIAR"}
-      </button>
+      {/* BOTÕES */}
+      <div style={{ display: "flex", gap: "12px" }}>
+        <button
+          className={styles.submitButton}
+          onClick={handleSubmit}
+          disabled={selected === null || submitted}
+        >
+          {submitted ? "ENVIADO" : "ENVIAR"}
+        </button>
+
+        {submitted &&(<button onClick={handleNextExercise} className={styles.primaryButton }>
+          Próximo exercício
+        </button>
+        )}
+      </div>
 
       {/* FEEDBACK */}
       {submitted && (

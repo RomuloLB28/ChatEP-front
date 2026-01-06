@@ -274,3 +274,42 @@
   color: #000000;
 }
 
+/* BOTÃO ☰ */
+.menuButton {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .menuButton {
+    display: block;
+  }
+
+  /* ESCONDE TUDO */
+  .nav,
+  .actions {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    background-color: #19135F;
+    padding: 1.5rem 0;
+  }
+
+  /* MOSTRA QUANDO CLICA */
+  .navOpen,
+  .actionsOpen {
+    display: flex;
+  }
+
+  .header {
+    flex-wrap: wrap;
+  }
+}
+

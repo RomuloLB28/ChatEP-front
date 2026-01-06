@@ -5,8 +5,8 @@ export async function GET(req: Request) {
   const type = searchParams.get("type");
 
   const url = type
-    ? `http://localhost:4000/exercises?type=${type}`
-    : `http://localhost:4000/exercises`;
+    ? `https://chatep-back.onrender.com/exercises?type=${type}`
+    : `https://chatep-back.onrender.com/exercises`;
 
 
   const res = await fetch(url);

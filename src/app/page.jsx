@@ -1,7 +1,12 @@
+"use client";
+
 import styles from "./page.module.css";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <div className={styles.page}>
       {/* HEADER */}
@@ -10,13 +15,23 @@ export default function Home() {
           <h1>ChatEP</h1>
         </div>
 
-        <nav className={styles.nav}>
-          <a href="#">Produtos</a>
-          <a href="#">Tutorial</a>
-          <a href="#">Sobre</a>
+        {/* BOTÃO MOBILE */}
+        <button
+          className={styles.menuButton}
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
+        </button>
+
+        <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ""}`}>
+          <a href="/em-progresso">Produtos</a>
+          <a href="/em-progresso">Tutorial</a>
+          <a href="/em-progresso">Sobre</a>
         </nav>
 
-        <div className={styles.actions}>
+        <div
+          className={`${styles.actions} ${menuOpen ? styles.actionsOpen : ""}`}
+        >
           <Link href="login">
             <button className={styles.login}>Login</button>
           </Link>
@@ -82,7 +97,7 @@ export default function Home() {
             Fale em inglês e receba transcrição automática e dicas de melhoria,
             ajudando você a ganhar confiança e fluência.
           </p>
-          <Link href="speaking">
+          <Link href="/em-progresso">
             <button className={styles.practiceBtn}>
               Praticar <span>→</span>
             </button>

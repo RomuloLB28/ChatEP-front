@@ -3,8 +3,10 @@
 import styles from "./page.module.css";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+import { useState } from "react";
 
 export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const { data: session, status } = useSession();
 
   const isLogged = status === "authenticated";
@@ -19,13 +21,25 @@ export default function Home() {
           </Link>
         </div>
 
-        <nav className={styles.nav}>
-          <a href="#">Produtos</a>
-          <a href="#">Tutorial</a>
-          <a href="#">Sobre</a>
+        {/* BOTÃO ☰ (mobile) */}
+        <button
+          className={styles.menuButton}
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
+        </button>
+
+        {/* NAV */}
+        <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ""}`}>
+          <a href="/em-progresso">Produtos</a>
+          <a href="/em-progresso">Tutorial</a>
+          <a href="/em-progresso">Sobre</a>
         </nav>
 
-        <div className={styles.actions}>
+        {/* ACTIONS */}
+        <div
+          className={`${styles.actions} ${menuOpen ? styles.actionsOpen : ""}`}
+        >
           {!isLogged ? (
             <>
               <Link href="/login">
@@ -37,7 +51,8 @@ export default function Home() {
             </>
           ) : (
             <>
-              <Link href="/profile">
+              {/*/profile */}
+              <Link href="/em-progresso">
                 <button className={styles.profileBtn}>
                   Olá, {session.user.name?.split(" ")[0]}
                 </button>
@@ -111,7 +126,7 @@ export default function Home() {
             Fale em inglês e receba transcrição automática e dicas de melhoria,
             ajudando você a ganhar confiança e fluência.
           </p>
-          <Link href="speaking">
+          <Link href="/em-progresso">
             <button className={styles.practiceBtn}>
               Praticar <span>→</span>
             </button>

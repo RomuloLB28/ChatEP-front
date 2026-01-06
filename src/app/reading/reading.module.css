@@ -65,12 +65,8 @@
   background-color: #dc2626;
 }
 
-.submitButton {
-  margin-top: 16px;
-}
-
 /* Botão */
-.submitButton {
+.submitButton, .primaryButton {
   background-color: #dc2626;
   color: white;
   font-weight: 600;
@@ -79,6 +75,7 @@
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  margin-top: 16px;
 }
 
 .submitButton:hover {
@@ -96,4 +93,7 @@
   font-weight: 600;
   color: #1e3a8a;
   margin-top: 0.5rem;
+}
+.primaryButton {
+  background-color: #16a34a;
 }

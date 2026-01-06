@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const handler = NextAuth({
   providers: [
     GoogleProvider({
@@ -10,11 +12,10 @@ const handler = NextAuth({
   ],
 
   callbacks: {
-    // 1️⃣ Quando logar com Google
     async signIn({ user, account }) {
       if (account?.provider === "google") {
         try {
-          const res = await fetch("http://localhost:4000/auth/google", {
+          const res = await fetch(`${API_URL}/auth/google`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -27,20 +28,18 @@ const handler = NextAuth({
             }),
           });
 
-          const data = await res.json();
+          if (!res.ok) return false;
 
-          // 🔥 Guarda temporariamente o JWT do backend
+          const data = await res.json();
           (user as any).backendToken = data.access_token;
         } catch (err) {
           console.error("Erro ao enviar para backend:", err);
           return false;
         }
       }
-
       return true;
     },
 
-    // 2️⃣ Salva o token do backend no JWT do NextAuth
     async jwt({ token, user }) {
       if (user && (user as any).backendToken) {
         token.backendToken = (user as any).backendToken;
@@ -48,9 +47,8 @@ const handler = NextAuth({
       return token;
     },
 
-    // 3️⃣ Expõe o token do backend na sessão
     async session({ session, token }) {
-      session.backendToken = token.backendToken;
+      session.backendToken = token.backendToken as string;
       session.user.id = token.sub!;
       return session;
     },

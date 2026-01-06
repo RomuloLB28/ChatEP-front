@@ -90,7 +90,7 @@ export default function ListeningPage() {
 
     if (!session?.backendToken) return;
 
-    await fetch("http://localhost:4000/user-exercises", {
+    await fetch("https://chatep-back.onrender.com/user-exercises", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

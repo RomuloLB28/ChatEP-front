@@ -17,7 +17,7 @@ export default function WritingPage() {
 
   useEffect(() => {
     async function loadWritingExercises() {
-      const res = await fetch("http://localhost:4000/exercises?type=writing");
+      const res = await fetch("https://chatep-back.onrender.com/exercises?type=writing");
       const data = await res.json();
       setExercises(data);
     }
@@ -50,7 +50,7 @@ export default function WritingPage() {
       score: correct ? 1 : 0,
     };
 
-    await fetch("http://localhost:4000/user-exercises", {
+    await fetch("https://chatep-back.onrender.com/user-exercises", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -13,7 +13,7 @@ export default function MeusExerciciosPage() {
 
     async function loadExercises() {
       const res = await fetch(
-        "http://localhost:4000/user-exercises/me",
+        "https://chatep-back.onrender.com/user-exercises/me",
         {
           headers: {
             Authorization: `Bearer ${session.backendToken}`,

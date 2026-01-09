@@ -10,6 +10,9 @@ export default function Home() {
   const { data: session, status } = useSession();
 
   const isLogged = status === "authenticated";
+  console.log(session);
+  const displayName =
+    session?.user?.name || session?.user?.email?.split("@")[0] || "";
 
   return (
     <div className={styles.page}>
@@ -54,7 +57,7 @@ export default function Home() {
               {/*/profile */}
               <Link href="/em-progresso">
                 <button className={styles.profileBtn}>
-                  Olá, {session.user.name?.split(" ")[0]}
+                  Olá, {displayName}
                 </button>
               </Link>
 

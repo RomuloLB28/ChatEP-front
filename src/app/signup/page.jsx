@@ -20,7 +20,7 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:4000/auth/signup", {
+      const res = await fetch("https://chat-ep-front.vercel.app/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import styles from "./reading.module.css";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function ReadingPage() {
   const { data: session } = useSession();
@@ -46,7 +47,7 @@ export default function ReadingPage() {
       return;
     }
 
-    await fetch("http://localhost:4000/user-exercises", {
+    await fetch(`${API_URL}/user-exercises`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

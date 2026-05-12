@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { LoginBtn } from "../LoginBtn";
 import styles from "./signup.module.css";
 import Link from "next/link";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function SignupPage() {
   const router = useRouter();
@@ -20,7 +21,7 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:4000/auth/signup", {
+      const res = await fetch(`${API_URL}/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

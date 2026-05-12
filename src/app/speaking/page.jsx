@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import styles from "./exercises/speaking.module.css";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function SpeakingPage() {
   const [recording, setRecording] = useState(false);
@@ -29,7 +30,7 @@ export default function SpeakingPage() {
     const formData = new FormData();
     formData.append("file", blob, "audio.webm");
 
-    const response = await fetch("http://localhost:4000/speaking/transcribe", {
+    const response = await fetch(`${API_URL}/speaking/transcribe`, {
       method: "POST",
       body: formData,
     });

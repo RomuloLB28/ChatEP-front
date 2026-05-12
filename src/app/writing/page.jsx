@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import styles from "./exercises/writing.module.css";
-const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function WritingPage() {
   const { data: session, status } = useSession();
@@ -18,7 +18,7 @@ export default function WritingPage() {
 
   useEffect(() => {
     async function loadWritingExercises() {
-      const res = await fetch(`${NEXT_PUBLIC_API_URL}/exercises?type=writing`);
+      const res = await fetch(`${API_URL}/exercises?type=writing`);
       const data = await res.json();
       setExercises(data);
     }
@@ -51,7 +51,7 @@ export default function WritingPage() {
       score: correct ? 1 : 0,
     };
 
-    await fetch(`${NEXT_PUBLIC_API_URL}/user-exercises`, {
+    await fetch(`${API_URL}/user-exercises`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

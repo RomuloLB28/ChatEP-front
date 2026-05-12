@@ -46,7 +46,7 @@ export default function ReadingPage() {
       return;
     }
 
-    await fetch("https://chatep-back.onrender.com/user-exercises", {
+    await fetch("http://localhost:4000/user-exercises", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -109,9 +109,10 @@ export default function ReadingPage() {
           {submitted ? "ENVIADO" : "ENVIAR"}
         </button>
 
-        {submitted &&(<button onClick={handleNextExercise} className={styles.primaryButton }>
-          Próximo exercício
-        </button>
+        {submitted && (
+          <button onClick={handleNextExercise} className={styles.primaryButton}>
+            Próximo exercício
+          </button>
         )}
       </div>
 
@@ -123,6 +124,13 @@ export default function ReadingPage() {
             : "❌ Resposta incorreta."}
         </p>
       )}
+      {/* Botão Voltar Genérico */}
+      <button
+        className={styles.backButton}
+        onClick={() => (window.location.href = "/home")}
+      >
+        ← Voltar para Home
+      </button>
     </div>
   );
 }

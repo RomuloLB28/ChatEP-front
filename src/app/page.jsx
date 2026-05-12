@@ -97,7 +97,7 @@ export default function Home() {
             Fale em inglês e receba transcrição automática e dicas de melhoria,
             ajudando você a ganhar confiança e fluência.
           </p>
-          <Link href="/em-progresso">
+          <Link href="/speaking">
             <button className={styles.practiceBtn}>
               Praticar <span>→</span>
             </button>

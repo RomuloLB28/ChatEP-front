@@ -73,6 +73,20 @@ export default function ListeningPage() {
   const exercise = exercises[currentIndex];
   const { _id, audioUrl, transcript, level } = exercise;
 
+  const extractTimes = (url) => {
+    if (!url) return { start: null, end: null };
+
+    const startMatch = url.match(/start=(\d+)/);
+    const endMatch = url.match(/end=(\d+)/);
+
+    return {
+      start: startMatch ? startMatch[1] : null,
+      end: endMatch ? endMatch[1] : null,
+    };
+  };
+
+  const { start, end } = extractTimes(audioUrl);
+
   const videoUrl = audioUrl.replace("watch?v=", "embed/");
 
   /* =========================
@@ -90,7 +104,7 @@ export default function ListeningPage() {
 
     if (!session?.backendToken) return;
 
-    await fetch("https://chatep-back.onrender.com/user-exercises", {
+    await fetch("http://localhost:4000/user-exercises", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -141,6 +155,13 @@ export default function ListeningPage() {
         />
       </div>
 
+      {start && end && (
+        <div className={styles.timeHint}>
+          🎯 O exercício está entre <strong>{start}s</strong> e{" "}
+          <strong>{end}s</strong> do vídeo
+        </div>
+      )}
+
       {/* FORM */}
       {!submitted && (
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -190,8 +211,8 @@ export default function ListeningPage() {
                     item.status === "correct"
                       ? styles.correct
                       : item.status === "missing"
-                      ? styles.missing
-                      : styles.wrong
+                        ? styles.missing
+                        : styles.wrong
                   }
                 >
                   {item.word}{" "}
@@ -214,6 +235,13 @@ export default function ListeningPage() {
           </div>
         </div>
       )}
+      {/* Botão Voltar Genérico */}
+      <button
+        className={styles.backButton}
+        onClick={() => router.push("/home")}
+      >
+        ← Voltar para a home
+      </button>
     </div>
   );
 }

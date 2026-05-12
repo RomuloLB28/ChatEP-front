@@ -1,0 +1,97 @@
+.container {
+  min-height: 100vh;
+  background-color: #f3f4f6; /* fundo padrão claro do sistema */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4rem 2rem;
+}
+
+.card {
+  width: 100%;
+  max-width: 900px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 3rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 2.2rem;
+  margin-bottom: 2.5rem;
+  text-align: center;
+  font-weight: 700;
+  color: #1e3a8a; /* azul principal */
+}
+
+.section {
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.section h2 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #1e3a8a;
+  font-weight: 600;
+}
+
+.section p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #374151;
+  margin-bottom: 0.8rem;
+  text-align: justify;
+}
+
+.list {
+  padding-left: 1.5rem;
+  margin-top: 0.8rem;
+}
+
+.list li {
+  margin-bottom: 0.6rem;
+  color: #111827;
+  line-height: 1.6;
+}
+
+/* Destaques visuais seguindo padrão do sistema */
+.section strong {
+  color: #dc2626; /* vermelho padrão de ação */
+}
+
+/* Botão genérico reutilizável */
+.backButton {
+  background: transparent;
+  border: none;
+  color: #1e3a8a;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  transition: 0.2s ease;
+}
+
+.backButton:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 2rem;
+  }
+
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .section h2 {
+    font-size: 1.1rem;
+  }
+}

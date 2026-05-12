@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import styles from "./exercises/writing.module.css";
+import styles from "./writing.module.css";
 
 export default function WritingPage() {
   const { data: session, status } = useSession();

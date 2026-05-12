@@ -1,0 +1,83 @@
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1E3A8A; /* azul do seu projeto */
+}
+
+.chatBox {
+  border: 1px solid #e5e7eb;
+  background-color: #f3f4f6; /* cinza claro do seu projeto */
+  padding: 16px;
+  height: 350px;
+  overflow-y: auto;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.message {
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  max-width: 80%;
+  line-height: 1.4;
+}
+
+.user {
+  background-color: #1E3A8A;
+  color: white;
+  margin-left: auto;
+  text-align: right;
+}
+
+.tutor {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  color: #111827;
+}
+
+.inputContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  outline: none;
+}
+
+.input:focus {
+  border-color: #1E3A8A;
+}
+
+.button {
+  background-color: #1E3A8A;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.button:hover {
+  background-color: #162d6b;
+}
+
+.button:active {
+  transform: scale(0.97);
+}

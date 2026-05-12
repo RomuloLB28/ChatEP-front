@@ -3,7 +3,7 @@
 import styles from "./login.module.css";
 import { LoginBtn } from "../LoginBtn";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -12,8 +12,18 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // ✅ ADICIONADO
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("savedEmail");
+    if (savedEmail) {
+      setEmail(savedEmail);
+      setRememberMe(true);
+    }
+  }, []);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -33,13 +43,17 @@ export default function LoginPage() {
       return;
     }
 
-    // login OK → vai pra home
+    if (rememberMe) {
+      localStorage.setItem("savedEmail", email);
+    } else {
+      localStorage.removeItem("savedEmail");
+    }
+
     router.push("/home");
   }
 
   return (
     <div className={styles.container}>
-      {/* Lado esquerdo - DESKTOP */}
       <div className={styles.left}>
         <h1 className={styles.logo}>ChatEP</h1>
         <h2 className={styles.title}>
@@ -51,9 +65,7 @@ export default function LoginPage() {
         </p>
       </div>
 
-      {/* Lado direito */}
       <div className={styles.right}>
-        {/* TÍTULO MOBILE */}
         <div className={styles.mobileHeader}>
           <h1 className={styles.logo}>ChatEP</h1>
         </div>
@@ -69,13 +81,43 @@ export default function LoginPage() {
           />
 
           <label className={styles.font}>SENHA</label>
-          <input
-            type="password"
-            placeholder="**********************"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+
+          <div style={{ position: "relative", width: "100%" }}>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="**********************"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{ width: "100%" }}
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: "absolute",
+                right: "15px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                zIndex: 2,
+              }}
+            >
+              👁
+            </button>
+          </div>
+
+          <div style={{ marginTop: "10px" }}>
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            />
+            <label style={{ marginLeft: "8px" }}>Salvar login</label>
+          </div>
 
           {error && <p style={{ color: "red" }}>{error}</p>}
 

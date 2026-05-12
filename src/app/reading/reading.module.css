@@ -7,6 +7,7 @@
   justify-content: center;
   padding: 2rem;
   gap: 2rem;
+  position: relative;
 }
 
 /* Texto */
@@ -66,7 +67,8 @@
 }
 
 /* Botão */
-.submitButton, .primaryButton {
+.submitButton,
+.primaryButton {
   background-color: #dc2626;
   color: white;
   font-weight: 600;
@@ -96,4 +98,42 @@
 }
 .primaryButton {
   background-color: #16a34a;
+}
+/* ============================= */
+/* Botão Voltar Melhorado */
+/* ============================= */
+
+.backButton {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+
+  background-color: #ffffff;
+  color: #1e3a8a;
+
+  padding: 0.6rem 1.2rem;
+  border-radius: 9999px;
+  border: 2px solid #1e3a8a;
+
+  font-weight: 600;
+  font-size: 0.9rem;
+
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.backButton:hover {
+  background-color: #1e3a8a;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.backButton:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }

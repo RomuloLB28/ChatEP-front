@@ -10,7 +10,6 @@ export default function Home() {
   const { data: session, status } = useSession();
 
   const isLogged = status === "authenticated";
-  console.log(session);
   const displayName =
     session?.user?.name || session?.user?.email?.split("@")[0] || "";
 
@@ -36,7 +35,7 @@ export default function Home() {
         <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ""}`}>
           <a href="/em-progresso">Produtos</a>
           <a href="/em-progresso">Tutorial</a>
-          <a href="/em-progresso">Sobre</a>
+          <a href="/sobre">Sobre</a>
         </nav>
 
         {/* ACTIONS */}
@@ -55,7 +54,7 @@ export default function Home() {
           ) : (
             <>
               {/*/profile */}
-              <Link href="/em-progresso">
+              <Link href="/perfil">
                 <button className={styles.profileBtn}>
                   Olá, {displayName}
                 </button>
@@ -129,7 +128,7 @@ export default function Home() {
             Fale em inglês e receba transcrição automática e dicas de melhoria,
             ajudando você a ganhar confiança e fluência.
           </p>
-          <Link href="/em-progresso">
+          <Link href="/speaking/exercises">
             <button className={styles.practiceBtn}>
               Praticar <span>→</span>
             </button>
@@ -173,7 +172,7 @@ export default function Home() {
             Produza textos curtos e receba sugestões de correção para evoluir
             sua gramática e clareza na escrita
           </p>
-          <Link href="writing">
+          <Link href="writing/exercises">
             <button className={styles.practiceBtn}>
               Praticar <span>→</span>
             </button>

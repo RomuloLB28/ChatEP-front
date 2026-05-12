@@ -15,7 +15,7 @@ export default function PracticePage() {
       name: "Speaking",
       description: "Treine sua fala com feedback em tempo real e transcrição automática.",
       icon: "🎤",
-      href: "/em-progresso",
+      href: "/speaking",
       className: styles.speaking,
     },
     {

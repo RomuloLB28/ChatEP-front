@@ -11,7 +11,7 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
 
-    // 🔥 LOGIN POR EMAIL/SENHA
+    // LOGIN POR EMAIL/SENHA
     CredentialsProvider({
       name: "credentials",
       credentials: {
@@ -35,7 +35,7 @@ const handler = NextAuth({
 
           const data = await res.json();
 
-          // 🔥 ISSO cria a sessão no NextAuth
+          // ISSO cria a sessão no NextAuth
           return {
             id: data.user.id,
             name: data.user.name,
@@ -52,7 +52,7 @@ const handler = NextAuth({
 
   callbacks: {
     async signIn({ user, account }) {
-      // 🔥 mantém seu fluxo do Google intacto
+      // mantém seu fluxo do Google intacto
       if (account?.provider === "google") {
         try {
           const res = await fetch(`${API_URL}/auth/google`, {

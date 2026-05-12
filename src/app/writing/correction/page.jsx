@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import styles from "../correction/correction.module.css";
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function WritingCorrection() {
   const [text, setText] = useState("");
@@ -15,7 +16,7 @@ export default function WritingCorrection() {
 
     try {
       const response = await fetch(
-        "http://localhost:4000/checker/correct-text",
+        `${NEXT_PUBLIC_API_URL}/checker/correct-text`,
         {
           method: "POST",
           headers: {

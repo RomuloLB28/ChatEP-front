@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function MeusExerciciosPage() {
   const { data: session, status } = useSession();
@@ -13,7 +14,7 @@ export default function MeusExerciciosPage() {
 
     async function loadExercises() {
       const res = await fetch(
-        "http://localhost:4000/user-exercises/me",
+        `${NEXT_PUBLIC_API_URL}/user-exercises/me`,
         {
           headers: {
             Authorization: `Bearer ${session.backendToken}`,

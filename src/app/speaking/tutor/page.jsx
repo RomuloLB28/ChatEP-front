@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import styles from "./chat.module.css";
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function SpeakingTutor() {
   const [messages, setMessages] = useState([]);
@@ -14,7 +15,7 @@ export default function SpeakingTutor() {
     setInput("")
 
     try {
-      const response = await fetch("http://localhost:4000/chat", {
+      const response = await fetch(`${NEXT_PUBLIC_API_URL}/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

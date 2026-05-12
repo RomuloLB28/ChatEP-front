@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import styles from "./listening.module.css";
-
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 /* =========================
    FUNÇÕES AUXILIARES
 ========================= */
@@ -104,7 +104,7 @@ export default function ListeningPage() {
 
     if (!session?.backendToken) return;
 
-    await fetch("http://localhost:4000/user-exercises", {
+    await fetch(`${NEXT_PUBLIC_API_URL}/user-exercises`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

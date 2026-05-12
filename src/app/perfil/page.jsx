@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import styles from "./perfil.module.css";
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function UserProfile() {
   const { data: session, status } = useSession();
@@ -18,7 +19,7 @@ export default function UserProfile() {
     async function fetchExercises() {
       try {
         const response = await fetch(
-          "http://localhost:4000/user-exercises/me",
+          `${NEXT_PUBLIC_API_URL}/user-exercises/me`,
           {
             headers: {
               Authorization: `Bearer ${session.backendToken}`,

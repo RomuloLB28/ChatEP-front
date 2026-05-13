@@ -36,3 +36,47 @@
   flex: 1;
   padding: 2rem;
 }
+
+/* VERSÃO MOBILE COMPLETA (speakingLayout.module.css) */
+@media (max-width: 768px) {
+  .wrapper {
+    flex-direction: column; /* Empilha o menu no topo e o chat embaixo */
+    min-height: 100vh;
+    overflow-x: hidden;     /* Garante que nada escape lateralmente */
+  }
+
+  .sidebar {
+    width: 100%;            
+    padding: 1rem;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: center;
+    box-sizing: border-box; /* Essencial para o padding não somar na largura */
+  }
+
+  .sidebar h2 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .sidebar nav {
+    flex-direction: row;    /* Links lado a lado no topo */
+    justify-content: center;
+    flex-wrap: wrap;        
+    gap: 0.8rem;
+  }
+
+  .sidebar a {
+    font-size: 0.85rem;
+    padding: 0.4rem;
+  }
+
+  .content {
+    padding: 10px;          /* Espaço mínimo para o chat respirar */
+    width: 100%;
+    flex: 1;                /* Faz o conteúdo ocupar o resto da tela */
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+}

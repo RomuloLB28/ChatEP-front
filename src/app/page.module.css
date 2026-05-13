@@ -354,5 +354,25 @@
   .section::after {
     width: 80%;              /* Aumenta um pouco a linha no mobile */
   }
+  .footerSections {
+    flex-direction: column; /* Empilha as colunas */
+    align-items: center;    /* Centraliza os blocos */
+    gap: 2rem;              /* Espaço entre os blocos empilhados */
+  }
+
+  .footerLeft,
+  .footerCenter,
+  .footerRight {
+    text-align: center;     /* Centraliza o texto de todos os blocos */
+    width: 100%;
+  }
+
+  .footerContent h2 {
+    font-size: 1.2rem;      /* Reduz um pouco o título no celular */
+  }
+
+  .footer {
+    padding: 3rem 1rem;     /* Aumenta o respiro vertical */
+  }
 
 }

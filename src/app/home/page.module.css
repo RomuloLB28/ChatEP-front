@@ -1,9 +1,9 @@
 .page {
   min-height: 100vh;
-  background-color: #19135F; /* azul do TCC */
+  background-color: #19135F;
   font-family: "Karla", sans-serif;
   color: white;
-  overflow-x: auto; /* permite rolagem lateral */
+  overflow-x: auto;
 }
 .main h1, 
 .main h2, 
@@ -55,7 +55,7 @@
   gap: 1rem;
 }
 
-.login,.logout {
+.login {
   background: transparent;
   border: 1px solid white;
   color: white;
@@ -66,7 +66,7 @@
   font-size: 1rem;
 }
 
-.login, .logout:hover {
+.login:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
@@ -117,7 +117,6 @@
   background-color: #e5e7eb; /* mesma cor do border-bottom */
 }
 
-/* Texto e imagem alternando */
 .textLeft,
 .textRight {
   flex: 1;
@@ -145,10 +144,10 @@
   border-radius: 0.5rem;
 }
 
-/* BOTÃO "PRATICAR" */
+/* BOTÃO PRATICAR */
 .practiceBtn {
   margin-top: 1rem;
-  background: #ec0808; /* vermelho do TCC */
+  background: #ec0808;
   border: none;
   color: white;
   padding: 0.75rem 1.5rem;
@@ -166,11 +165,11 @@
 }
 
 .practiceBtn:hover {
-  background: #ff0000; /* vermelho mais escuro no hover */
+  background: #ff0000;
 }
 /* FOOTER */
 .footer {
-  background-color: #19135F; /* mesmo azul do header/main */
+  background-color: #19135F;
   color: white;
   text-align: center;
   padding: 2rem 1rem;
@@ -193,7 +192,7 @@
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 1.5rem;
-  flex-wrap: wrap; /* responsivo */
+  flex-wrap: wrap;
 }
 
 .footerLeft,
@@ -221,13 +220,12 @@
 
 .footerCopy {
   font-size: 0.9rem;
-  color: #d1d5db; /* cinza clarinho */
+  color: #d1d5db;
   margin-top: 1rem;
 }
 
-/* Classe genérica para círculo atrás da imagem */
 .circle {
-  position: relative; /* referência para o círculo */
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -240,52 +238,38 @@
   height: 320px;
   background-color: #E8EAFF;
   border-radius: 50%;
-  z-index: 1; /* atrás da imagem */
+  z-index: 1; 
 }
 
 .circle img {
   position: relative;
-  z-index: 2; /* imagem na frente */
+  z-index: 2;
 }
 
 .greenText {
   background-color: #E0FF16;
   display: inline-block;
-  padding: 2px 6px; /* ajusta o espaço dentro do retângulo */
-  line-height: 1.2; /* mantém alinhamento */
+  padding: 2px 6px; 
+  line-height: 1.2;
   border-radius: 1rem;
 }
 
-.actions {
+.googleBtn img {
+  width: 20px;
+  height: 20px;
+}
+
+.googleBtn {
   display: flex;
-  align-items: center; /* 🔥 ESSENCIAL */
-  gap: 1rem;
-}
-
-.userName {
-  font-size: 1rem;
-  font-weight: 500;
-  line-height: 1;     /* 🔥 evita “afundar” o texto */
-  margin: 0;          /* segurança extra */
-  display: flex;      /* garante alinhamento */
   align-items: center;
-}
-
-.profileBtn {
-  background: #ec0808; /* vermelho do TCC */
-  border: none;
-  color: white;
-  padding: 0.5rem 1.2rem;
-  border-radius: 0.5rem;
+  justify-content: center;
+  gap: 0.6rem;
+  border: 1px solid #ccc;
+  background: #fff;
+  padding: 0.8rem;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-}
-
-.profileBtn:hover {
-  background: #ff0000;
+  color: #000000;
 }
 
 /* BOTÃO ☰ */
@@ -300,27 +284,33 @@
 
 /* MOBILE */
 @media (max-width: 768px) {
+
+  .circle::before {
+    width: 220px; 
+    height: 220px;
+  }
+
+  .circle img {
+    max-width: 200px; 
+    height: auto;
+  }
+
   .menuButton {
     display: block;
   }
 
-  /* Esconde menu inicialmente */
   .nav,
   .actions {
     display: none;
-    width: 100%;
     flex-direction: column;
     align-items: center;
-    gap: 1.2rem;
+    gap: 1.5rem;
+    width: 100%;
     background-color: #19135F;
     padding: 1.5rem 0;
   }
 
-  /* Mostra ao clicar */
-  .navOpen {
-    display: flex;
-  }
-
+  .navOpen,
   .actionsOpen {
     display: flex;
   }
@@ -328,4 +318,56 @@
   .header {
     flex-wrap: wrap;
   }
+
+  .main, 
+  .section {
+    flex-direction: column;
+    text-align: center;     
+    padding: 2rem 1rem; 
+    gap: 1.5rem;
+    overflow: hidden;     
+  }
+
+  .textLeft,
+  .textRight {
+    text-align: center;     
+    order: 2;               
+  }
+
+  .imageLeft,
+  .imageRight {
+    order: 1;              
+    width: 100%;
+  }
+
+  .section img,
+  .main img {
+    max-width: 90%;      
+    margin: 0 auto;
+  }
+
+  .section::after {
+    width: 80%;              
+  }
+  .footerSections {
+    flex-direction: column; 
+    align-items: center;   
+    gap: 2rem;             
+  }
+
+  .footerLeft,
+  .footerCenter,
+  .footerRight {
+    text-align: center;     
+    width: 100%;
+  }
+
+  .footerContent h2 {
+    font-size: 1.2rem; 
+  }
+
+  .footer {
+    padding: 3rem 1rem; 
+  }
+
 }

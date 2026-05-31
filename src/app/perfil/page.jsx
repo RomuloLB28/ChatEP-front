@@ -18,14 +18,11 @@ export default function UserProfile() {
 
     async function fetchExercises() {
       try {
-        const response = await fetch(
-          `${API_URL}/user-exercises/me`,
-          {
-            headers: {
-              Authorization: `Bearer ${session.backendToken}`,
-            },
+        const response = await fetch(`${API_URL}/user-exercises/me`, {
+          headers: {
+            Authorization: `Bearer ${session.backendToken}`,
           },
-        );
+        });
 
         if (response.status === 401) {
           setError("Sessão expirada");
@@ -39,12 +36,40 @@ export default function UserProfile() {
         console.error("Erro ao buscar exercícios:", err);
         setExercises([]);
       } finally {
-        setLoading(false);
+        loading(false);
       }
     }
 
     fetchExercises();
   }, [session]);
+
+  const exportToCSV = () => {
+    if (exercises.length === 0) return;
+
+    const headers = ["Tipo", "Resposta", "Nivel", "Score", "Correto", "Data"];
+
+    const rows = exercises.map((ex) =>
+      [
+        ex.type,
+        `"${(ex.userAnswer || "").replace(/"/g, '""')}"`,
+        ex.level,
+        ex.score,
+        ex.isCorrect ? "Sim" : "Nao",
+        new Date(ex.createdAt).toLocaleString(),
+      ].join(";"),
+    );
+
+    const csvContent =
+      "data:text/csv;charset=utf-8,\uFEFF" +
+      [headers.join(";"), ...rows].join("\n");
+
+    const downloadAnchor = document.createElement("a");
+    downloadAnchor.setAttribute("href", encodeURI(csvContent));
+    downloadAnchor.setAttribute("download", "historico_chatep.csv");
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+  };
 
   if (status === "loading") return <p>Carregando sessão...</p>;
   if (!session) return <p>Usuário não autenticado</p>;
@@ -72,8 +97,6 @@ export default function UserProfile() {
             <p className={styles.level}>Perfil do Estudante</p>
           </div>
         </div>
-
-        {/* Resumo */}
         <div className={styles.xpSection}>
           <div className={styles.xpInfo}>
             <span>Total de Exercícios</span>
@@ -87,8 +110,6 @@ export default function UserProfile() {
             />
           </div>
         </div>
-
-        {/* Estatísticas */}
         <div className={styles.stats}>
           <div className={styles.statCard}>
             <p>Listening</p>
@@ -119,6 +140,13 @@ export default function UserProfile() {
           >
             {showHistory ? "Ocultar Histórico" : "Ver Histórico de Exercícios"}
           </button>
+          <button
+            className={styles.secondaryButton}
+            onClick={exportToCSV}
+            disabled={exercises.length === 0}
+          >
+          Exportar Histórico em CSV
+          </button>
 
           <button className={styles.secondaryButton}>Editar Perfil</button>
 
@@ -129,8 +157,6 @@ export default function UserProfile() {
             Sair da conta
           </button>
         </div>
-
-        {/* Histórico Expandido */}
         {showHistory && (
           <div className={styles.historySection}>
             <h3>Histórico Completo</h3>
@@ -162,7 +188,6 @@ export default function UserProfile() {
             ))}
           </div>
         )}
-        {/* Botão Voltar Genérico */}
         <button
           className={styles.backButton}
           onClick={() => (window.location.href = "/home")}

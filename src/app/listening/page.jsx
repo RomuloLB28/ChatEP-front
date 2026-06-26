@@ -16,24 +16,26 @@ const normalize = (str) =>
     .replace(/[?.!,]/g, "");
 
 const buildDiff = (user, correct) => {
-  const userWords = normalize(user).split(" ");
-  const correctWords = normalize(correct).split(" ");
-
+  const userWords = normalize(user).split(/\s+/).filter(Boolean);
+  const correctWords = normalize(correct).split(/\s+/).filter(Boolean);
+   
   let correctCount = 0;
+  let userPointer = 0;
 
-  const diffResult = correctWords.map((word, index) => {
-    const userWord = userWords[index];
+  const diffResult = correctWords.map((word) => {
+    const lookAheadWindow = userWords.slice(userPointer, userPointer + 3);
+    const foundIndexInWindow = lookAheadWindow.indexOf(word);
 
-    if (userWord === word) {
+    if (foundIndexInWindow !== -1) {
+      userPointer += foundIndexInWindow + 1;
       correctCount++;
       return { word, status: "correct" };
     }
-
-    if (!userWord) {
-      return { word, status: "missing" };
+    if (userPointer >= userWords.length) {
+      return { word, status: "missing" }; // Fica Amarelo (Palavra faltante)
     }
-
-    return { word, status: "wrong", userWord };
+    userPointer++;
+    return { word, status: "wrong" }; // Fica Vermelho (Palavra incorreta)
   });
 
   const score = Math.round((correctCount / correctWords.length) * 100);

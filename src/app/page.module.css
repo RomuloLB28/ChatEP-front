@@ -286,11 +286,22 @@
 
 /* MOBILE */
 @media (max-width: 768px) {
+  /* ... seus estilos anteriores do menu ... */
+
+  .circle::before {
+    width: 220px;  /* Reduzido para mobile */
+    height: 220px; /* Reduzido para mobile */
+  }
+
+  .circle img {
+    max-width: 200px; /* Garante que a imagem caiba dentro do novo círculo */
+    height: auto;
+  }
+
   .menuButton {
     display: block;
   }
 
-  /* ESCONDE TUDO */
   .nav,
   .actions {
     display: none;
@@ -302,7 +313,6 @@
     padding: 1.5rem 0;
   }
 
-  /* MOSTRA QUANDO CLICA */
   .navOpen,
   .actionsOpen {
     display: flex;
@@ -311,5 +321,58 @@
   .header {
     flex-wrap: wrap;
   }
-}
 
+  .main, 
+  .section {
+    flex-direction: column; /* Empilha imagem e texto */
+    text-align: center;      /* Centraliza o texto para melhor leitura no celular */
+    padding: 2rem 1rem;      /* Reduz o padding para ganhar espaço nas laterais */
+    gap: 1.5rem;
+    overflow: hidden;        /* Garante que nada escape do container */
+  }
+
+  .textLeft,
+  .textRight {
+    text-align: center;      /* Remove o alinhamento esquerda/direita */
+    order: 2;                /* Garante que o texto venha depois da imagem, se desejar */
+  }
+
+  .imageLeft,
+  .imageRight {
+    order: 1;                /* Coloca a imagem no topo no mobile */
+    width: 100%;
+  }
+
+  /* Ajuste específico para as imagens não estourarem */
+  .section img,
+  .main img {
+    max-width: 90%;          /* Dá uma folga nas laterais */
+    margin: 0 auto;
+  }
+
+  /* Ajuste da linha decorativa para não sumir ou quebrar */
+  .section::after {
+    width: 80%;              /* Aumenta um pouco a linha no mobile */
+  }
+  .footerSections {
+    flex-direction: column; /* Empilha as colunas */
+    align-items: center;    /* Centraliza os blocos */
+    gap: 2rem;              /* Espaço entre os blocos empilhados */
+  }
+
+  .footerLeft,
+  .footerCenter,
+  .footerRight {
+    text-align: center;     /* Centraliza o texto de todos os blocos */
+    width: 100%;
+  }
+
+  .footerContent h2 {
+    font-size: 1.2rem;      /* Reduz um pouco o título no celular */
+  }
+
+  .footer {
+    padding: 3rem 1rem;     /* Aumenta o respiro vertical */
+  }
+
+}

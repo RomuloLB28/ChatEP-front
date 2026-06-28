@@ -7,7 +7,6 @@ export default function SpeakingTutor() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
-  // 🧠 Estados do Injetor de System Prompt (Modo Maker)
   const [showMakerPanel, setShowMakerPanel] = useState(false);
   const [useCustomPrompt, setUseCustomPrompt] = useState(false);
   const [customSystemPrompt, setCustomSystemPrompt] = useState("");
@@ -21,7 +20,6 @@ export default function SpeakingTutor() {
     const textToSend = input;
     setInput("");
 
-    // 🧠 Correção: Valida se o prompt customizado realmente tem conteúdo escrito
     const hasValidCustomPrompt = useCustomPrompt && customSystemPrompt.trim().length > 0;
 
     try {
@@ -31,8 +29,8 @@ export default function SpeakingTutor() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ 
-          text: textToSend,
-          useCustomPrompt: hasValidCustomPrompt, // Envia true apenas se não estiver vazio
+          message: textToSend, 
+          useCustomPrompt: hasValidCustomPrompt, 
           customSystemPrompt: hasValidCustomPrompt ? customSystemPrompt : null
         }),
       });
@@ -42,10 +40,16 @@ export default function SpeakingTutor() {
       const botMessage = { role: "assistant", content: data.response || data.reply };
       setMessages((prev) => [...prev, botMessage]);
 
-      // 🔊 Falar resposta
       speak(botMessage.content);
     } catch (error) {
       console.error("Erro ao conversar:", error);
+    }
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
     }
   }
 
@@ -60,17 +64,15 @@ export default function SpeakingTutor() {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
         <h1 className={styles.title} style={{ margin: 0 }}>Talk with the Tutor</h1>
         
-        {/* 🛠️ Botão Engrenagem/Configuração Maker */}
         <button 
           onClick={() => setShowMakerPanel(!showMakerPanel)} 
           className={styles.button}
           style={{ padding: "0.5rem 1rem", fontSize: "0.9rem", backgroundColor: "#4b5563" }}
         >
-          {showMakerPanel ? "⚙️ Ocultar Ajustes" : "⚙️ Modo Maker"}
+          {showMakerPanel ? "Ocultar Ajustes" : "Modo Maker"}
         </button>
       </div>
 
-      {/* 🔮 Painel de Injeção de System Prompt */}
       {showMakerPanel && (
         <div style={{
           backgroundColor: "#f3f4f6",
@@ -123,7 +125,6 @@ export default function SpeakingTutor() {
         </div>
       )}
 
-      {/* Caixa do Chat */}
       <div className={styles.chatBox}>
         {messages.map((msg, index) => (
           <div
@@ -137,12 +138,12 @@ export default function SpeakingTutor() {
         ))}
       </div>
 
-      {/* Input de Mensagem */}
       <div className={styles.inputContainer}>
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="Type your message..."
           className={styles.input}
         />

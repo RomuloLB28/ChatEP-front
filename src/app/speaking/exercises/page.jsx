@@ -119,27 +119,38 @@ export default function SpeakingPage() {
         <p><strong>Prompt:</strong> {prompt}</p>
       </div>
 
-      {!transcription && (
+      {similarity === null && !recording && (
         <button
           className={`${styles.micButton} ${recording ? styles.recording : ""}`}
-          onClick={recording ? stopRecording : startRecording}
+          onClick={startRecording}
         >
           <span className={styles.micIcon}>🎙️</span>
         </button>
       )}
 
-      {transcription && (
-        <div className={styles.resultBox}>
-          <p><strong>Your transcription:</strong></p>
-          <p>{transcription}</p>
+      {recording && (
+        <button
+          className={`${styles.micButton} ${styles.recording}`}
+          onClick={stopRecording}
+        >
+          <span className={styles.micIcon}>🛑</span>
+        </button>
+      )}
 
-          <p><strong>Similarity:</strong> {similarity}%</p>
+      {similarity !== null && (
+        <div style={{ marginTop: "20px", padding: "15px", backgroundColor: "#1e293b", borderRadius: "8px", color: "#fff" }}>
+          <p><strong>Your transcription:</strong></p>
+          <p style={{ fontStyle: "italic", color: "#cbd5e1" }}>{transcription}</p>
+
+          <p style={{ fontSize: "1.2rem", marginTop: "10px" }}>
+            <strong>Similarity:</strong> <span style={{ color: parseFloat(similarity) > 70 ? "#10b981" : "#f59e0b" }}>{similarity}%</span>
+          </p>
 
           <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
-            <button onClick={handleRetryExercise} className={styles.retryButton}>
+            <button onClick={handleRetryExercise} style={{ padding: "8px 16px", backgroundColor: "#4b5563", color: "#fff", border: "none", borderRadius: "4px", cursor: "pointer" }}>
               Refazer
             </button>
-            <button onClick={handleNextExercise} className={styles.nextButton}>
+            <button onClick={handleNextExercise} style={{ padding: "8px 16px", backgroundColor: "#2563eb", color: "#fff", border: "none", borderRadius: "4px", cursor: "pointer" }}>
               Próximo Exercício
             </button>
           </div>

@@ -10,8 +10,6 @@ export default function SpeakingPage() {
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
   const [exercises, setExercises] = useState([]);
-  
-  // Controle do exercício atual
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
 
   useEffect(() => {
@@ -27,39 +25,47 @@ export default function SpeakingPage() {
     return <p>Carregando...</p>;
   }
 
-  // Pega o exercício baseado no índice dinâmico
   const exercise = exercises[currentExerciseIndex];
   const { prompt } = exercise;
 
   function calculateSimilarity(promptText, userText) {
-    const p = promptText.toLowerCase().split(" ");
-    const u = userText.toLowerCase().split(" ");
+    if (!promptText || !userText) return "0.00";
+
+    const cleanPrompt = promptText.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").split(/\s+/).filter(Boolean);
+    const cleanUser = userText.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").split(/\s+/).filter(Boolean);
 
     let matches = 0;
-
-    p.forEach(word => {
-      if (u.includes(word)) matches++;
+    cleanPrompt.forEach(word => {
+      if (cleanUser.includes(word)) matches++;
     });
 
-    return ((matches / p.length) * 100).toFixed(2);
+    if (cleanPrompt.length === 0) return "0.00";
+    return ((matches / cleanPrompt.length) * 100).toFixed(2);
   }
 
   async function sendAudioToBackend(blob) {
     const formData = new FormData();
     formData.append("file", blob, "audio.webm");
 
-    const response = await fetch(`${API_URL}/speaking/transcribe`, {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const response = await fetch(`${API_URL}/speaking/transcribe`, {
+        method: "POST",
+        body: formData,
+      });
 
-    const data = await response.json();
+      const data = await response.json();
+      const text = data.text || data.reply || "";
 
-    const text = data.text; // backend precisa retornar { text: "..." }
-    setTranscription(text);
+      if (!text) return;
 
-    const percent = calculateSimilarity(prompt, text);
-    setSimilarity(percent);
+      setTranscription(text);
+
+      const currentPrompt = prompt || "";
+      const percent = calculateSimilarity(currentPrompt, text);
+      setSimilarity(percent);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const startRecording = async () => {
@@ -82,7 +88,7 @@ export default function SpeakingPage() {
       setTranscription("");
       setSimilarity(null);
     } catch (err) {
-      console.error("Erro ao acessar o microfone:", err);
+      console.error(err);
       alert("Erro ao acessar o microfone. Verifique as permissões.");
     }
   };
@@ -92,7 +98,6 @@ export default function SpeakingPage() {
     setRecording(false);
   };
 
-  // Avançar para o próximo exercício
   const handleNextExercise = () => {
     if (currentExerciseIndex < exercises.length - 1) {
       setCurrentExerciseIndex(currentExerciseIndex + 1);
@@ -103,7 +108,6 @@ export default function SpeakingPage() {
     }
   };
 
-  // Resetar o exercício atual para tentar de novo
   const handleRetryExercise = () => {
     setTranscription("");
     setSimilarity(null);
@@ -115,7 +119,6 @@ export default function SpeakingPage() {
         <p><strong>Prompt:</strong> {prompt}</p>
       </div>
 
-      {/* Esconde o microfone se já houver transcrição para forçar o uso dos botões de ação */}
       {!transcription && (
         <button
           className={`${styles.micButton} ${recording ? styles.recording : ""}`}
@@ -132,7 +135,6 @@ export default function SpeakingPage() {
 
           <p><strong>Similarity:</strong> {similarity}%</p>
 
-          {/* Botões para avançar ou refazer */}
           <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
             <button onClick={handleRetryExercise} className={styles.retryButton}>
               Refazer

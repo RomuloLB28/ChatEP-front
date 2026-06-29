@@ -127,37 +127,37 @@ export default function SpeakingPage() {
       </div>
 
       {similarity === null && !recording && (
-        <button className={styles.micButton} onClick={startRecording}>
+        <button
+          className={`${styles.micButton} ${recording ? styles.recording : ""}`}
+          onClick={startRecording}
+        >
           <span className={styles.micIcon}>🎙️</span>
         </button>
       )}
 
       {recording && (
-        <button className={`${styles.micButton} ${styles.recording}`} onClick={stopRecording}>
+        <button
+          className={`${styles.micButton} ${styles.recording}`}
+          onClick={stopRecording}
+        >
           <span className={styles.micIcon}>🛑</span>
         </button>
       )}
 
       {similarity !== null && (
-        <div className={styles.resultBox} style={{ color: "#ffffff" }}>
+        <div style={{ marginTop: "20px", padding: "15px", backgroundColor: "#1e293b", borderRadius: "8px", color: "#fff" }}>
           <p><strong>Your transcription:</strong></p>
-          <p className={styles.transcriptionText} style={{ color: "#ffffff" }}>{transcription}</p>
+          <p style={{ fontStyle: "italic", color: "#cbd5e1" }}>{transcription}</p>
 
-          <div className={styles.similarityWrapper}>
-            <p className={styles.similarityLabel}>Similarity: {similarity}%</p>
-            <div className={styles.progressBar}>
-              <div 
-                className={`${styles.progressFill} ${getProgressColorClass(similarity)}`} 
-                style={{ width: `${similarity}%` }}
-              />
-            </div>
-          </div>
+          <p style={{ fontSize: "1.2rem", marginTop: "10px" }}>
+            <strong>Similarity:</strong> <span style={{ color: parseFloat(similarity) > 70 ? "#10b981" : "#f59e0b" }}>{similarity}%</span>
+          </p>
 
-          <div style={{ marginTop: "1rem", display: "flex", gap: "10px" }}>
-            <button onClick={handleRetryExercise} style={{ padding: "0.6rem 1.2rem", backgroundColor: "#4b5563", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: "600" }}>
+          <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
+            <button onClick={handleRetryExercise} style={{ padding: "8px 16px", backgroundColor: "#4b5563", color: "#fff", border: "none", borderRadius: "4px", cursor: "pointer" }}>
               Refazer
             </button>
-            <button onClick={handleNextExercise} style={{ padding: "0.6rem 1.2rem", backgroundColor: "#2563eb", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: "600" }}>
+            <button onClick={handleNextExercise} style={{ padding: "8px 16px", backgroundColor: "#2563eb", color: "#fff", border: "none", borderRadius: "4px", cursor: "pointer" }}>
               Próximo Exercício
             </button>
           </div>

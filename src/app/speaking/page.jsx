@@ -9,10 +9,9 @@ export default function SpeakingPage() {
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
   const [exercises, setExercises] = useState([]);
-  
-  // NOVOS ESTADOS PARA O FLUXO
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
-  const [result, setResult] = useState(null); 
+  const [transcription, setTranscription] = useState("");
+  const [similarity, setSimilarity] = useState(null);
   const [loadingResponse, setLoadingResponse] = useState(false);
 
   useEffect(() => {
@@ -28,9 +27,23 @@ export default function SpeakingPage() {
     return <p>Carregando...</p>;
   }
 
-  // Pega o exercício com base no índice dinâmico
   const exercise = exercises[currentExerciseIndex];
   const { prompt } = exercise;
+
+  function calculateSimilarity(promptText, userText) {
+    if (!promptText || !userText) return "0.00";
+
+    const cleanPrompt = promptText.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").split(/\s+/).filter(Boolean);
+    const cleanUser = userText.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").split(/\s+/).filter(Boolean);
+
+    let matches = 0;
+    cleanPrompt.forEach(word => {
+      if (cleanUser.includes(word)) matches++;
+    });
+
+    if (cleanPrompt.length === 0) return "0.00";
+    return ((matches / cleanPrompt.length) * 100).toFixed(2);
+  }
 
   async function sendAudioToBackend(blob) {
     setLoadingResponse(true);
@@ -44,8 +57,15 @@ export default function SpeakingPage() {
       });
 
       const data = await response.json();
-      console.log("Resposta backend:", data);
-      setResult(data); // Salva o resultado (similaridade, etc) para exibir na tela
+      const text = data.text || data.reply || "";
+
+      if (!text) return;
+
+      setTranscription(text);
+
+      const currentPrompt = prompt || "";
+      const percent = calculateSimilarity(currentPrompt, text);
+      setSimilarity(percent);
     } catch (err) {
       console.error("Erro ao enviar áudio:", err);
     } finally {
@@ -53,7 +73,6 @@ export default function SpeakingPage() {
     }
   }
 
-  // Iniciar gravação
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -68,31 +87,30 @@ export default function SpeakingPage() {
         const blob = new Blob(chunksRef.current, { type: "audio/webm" });
         const url = URL.createObjectURL(blob);
         setAudioUrl(url);
-
         await sendAudioToBackend(blob);
       };
 
       mediaRecorderRef.current.start();
       setRecording(true);
-      setResult(null); // Limpa resultado anterior se estiver refazendo
+      setTranscription("");
+      setSimilarity(null);
     } catch (err) {
       console.error("Erro ao acessar o microfone:", err);
       alert("Erro ao acessar o microfone. Verifique as permissões.");
     }
   };
 
-  // Parar gravação
   const stopRecording = () => {
     mediaRecorderRef.current.stop();
     setRecording(false);
   };
 
-  // FUNÇÕES DE NAVEGAÇÃO
   const handleNext = () => {
     if (currentExerciseIndex < exercises.length - 1) {
       setCurrentExerciseIndex(currentExerciseIndex + 1);
       setAudioUrl(null);
-      setResult(null);
+      setTranscription("");
+      setSimilarity(null);
     } else {
       alert("Você concluiu todos os exercícios de speaking!");
     }
@@ -100,39 +118,58 @@ export default function SpeakingPage() {
 
   const handleRetry = () => {
     setAudioUrl(null);
-    setResult(null);
+    setTranscription("");
+    setSimilarity(null);
+  };
+
+  const getProgressColorClass = (score) => {
+    const value = parseFloat(score);
+    if (value >= 75) return styles.high;
+    if (value >= 50) return styles.medium;
+    return styles.low;
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.textBox}>
-        <p>{prompt}</p>
+        <p><strong>Prompt:</strong> {prompt}</p>
       </div>
       
-      {/* Esconde o microfone se já houver um resultado na tela */}
-      {!result && !loadingResponse && (
-        <button
-          className={`${styles.micButton} ${recording ? styles.recording : ""}`}
-          onClick={recording ? stopRecording : startRecording}
-        >
+      {similarity === null && !recording && !loadingResponse && (
+        <button className={styles.micButton} onClick={startRecording}>
           <span className={styles.micIcon}>🎙️</span>
         </button>
       )}
 
-      {loadingResponse && <p>Avaliando sua pronúncia...</p>}
+      {recording && (
+        <button className={`${styles.micButton} ${styles.recording}`} onClick={stopRecording}>
+          <span className={styles.micIcon}>🛑</span>
+        </button>
+      )}
 
-      {/* EXIBIÇÃO DO RESULTADO E BOTÕES DE FLUXO */}
-      {result && (
-        <div className={styles.resultBox}>
-          <h3>Resultado da Avaliação</h3>
-          <p>Transcrição: {result.transcription}</p>
-          <p>Similaridade: {result.similarity}%</p> 
+      {loadingResponse && <p style={{ color: "#1e3a8a", fontWeight: "600" }}>Avaliando sua pronúncia...</p>}
+
+      {similarity !== null && (
+        <div className={styles.resultBox} style={{ color: "#ffffff" }}>
+          <h3 style={{ color: "#ffffff", margin: "0 0 0.5rem 0" }}>Resultado da Avaliação</h3>
+          <p style={{ color: "#ffffff" }}><strong>Transcrição:</strong></p>
+          <p className={styles.transcriptionText} style={{ color: "#ffffff" }}>{transcription}</p>
+
+          <div className={styles.similarityWrapper} style={{ color: "#ffffff" }}>
+            <p className={styles.similarityLabel} style={{ color: "#ffffff" }}>Similaridade: {similarity}%</p>
+            <div className={styles.progressBar}>
+              <div 
+                className={`${styles.progressFill} ${getProgressColorClass(similarity)}`} 
+                style={{ width: `${similarity}%` }}
+              />
+            </div>
+          </div>
           
-          <div className={styles.actionButtons}>
-            <button onClick={handleRetry} className={styles.retryButton}>
+          <div style={{ marginTop: "1rem", display: "flex", gap: "10px" }}>
+            <button onClick={handleRetry} style={{ padding: "0.6rem 1.2rem", backgroundColor: "#4b5563", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: "600" }}>
               Refazer
             </button>
-            <button onClick={handleNext} className={styles.nextButton}>
+            <button onClick={handleNext} style={{ padding: "0.6rem 1.2rem", backgroundColor: "#2563eb", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: "600" }}>
               Próximo Exercício
             </button>
           </div>

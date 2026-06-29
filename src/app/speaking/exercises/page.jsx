@@ -104,13 +104,20 @@ export default function SpeakingPage() {
       setTranscription("");
       setSimilarity(null);
     } else {
-      alert("Você concluiu todos os exercícios desta seção!");
+      alert("Você concluuiu todos os exercícios desta seção!");
     }
   };
 
   const handleRetryExercise = () => {
     setTranscription("");
     setSimilarity(null);
+  };
+
+  const getProgressColorClass = (score) => {
+    const value = parseFloat(score);
+    if (value >= 75) return styles.high;
+    if (value >= 50) return styles.medium;
+    return styles.low;
   };
 
   return (
@@ -120,37 +127,37 @@ export default function SpeakingPage() {
       </div>
 
       {similarity === null && !recording && (
-        <button
-          className={`${styles.micButton} ${recording ? styles.recording : ""}`}
-          onClick={startRecording}
-        >
+        <button className={styles.micButton} onClick={startRecording}>
           <span className={styles.micIcon}>🎙️</span>
         </button>
       )}
 
       {recording && (
-        <button
-          className={`${styles.micButton} ${styles.recording}`}
-          onClick={stopRecording}
-        >
+        <button className={`${styles.micButton} ${styles.recording}`} onClick={stopRecording}>
           <span className={styles.micIcon}>🛑</span>
         </button>
       )}
 
       {similarity !== null && (
-        <div style={{ marginTop: "20px", padding: "15px", backgroundColor: "#1e293b", borderRadius: "8px", color: "#fff" }}>
+        <div className={styles.resultBox} style={{ color: "#ffffff" }}>
           <p><strong>Your transcription:</strong></p>
-          <p style={{ fontStyle: "italic", color: "#cbd5e1" }}>{transcription}</p>
+          <p className={styles.transcriptionText} style={{ color: "#ffffff" }}>{transcription}</p>
 
-          <p style={{ fontSize: "1.2rem", marginTop: "10px" }}>
-            <strong>Similarity:</strong> <span style={{ color: parseFloat(similarity) > 70 ? "#10b981" : "#f59e0b" }}>{similarity}%</span>
-          </p>
+          <div className={styles.similarityWrapper}>
+            <p className={styles.similarityLabel}>Similarity: {similarity}%</p>
+            <div className={styles.progressBar}>
+              <div 
+                className={`${styles.progressFill} ${getProgressColorClass(similarity)}`} 
+                style={{ width: `${similarity}%` }}
+              />
+            </div>
+          </div>
 
-          <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
-            <button onClick={handleRetryExercise} style={{ padding: "8px 16px", backgroundColor: "#4b5563", color: "#fff", border: "none", borderRadius: "4px", cursor: "pointer" }}>
+          <div style={{ marginTop: "1rem", display: "flex", gap: "10px" }}>
+            <button onClick={handleRetryExercise} style={{ padding: "0.6rem 1.2rem", backgroundColor: "#4b5563", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: "600" }}>
               Refazer
             </button>
-            <button onClick={handleNextExercise} style={{ padding: "8px 16px", backgroundColor: "#2563eb", color: "#fff", border: "none", borderRadius: "4px", cursor: "pointer" }}>
+            <button onClick={handleNextExercise} style={{ padding: "0.6rem 1.2rem", backgroundColor: "#2563eb", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontWeight: "600" }}>
               Próximo Exercício
             </button>
           </div>

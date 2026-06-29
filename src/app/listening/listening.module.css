@@ -1,0 +1,254 @@
+.listeningContainer {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f3f4f6, #e5e7eb);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1rem;
+  position: relative;
+}
+
+/* ============================= */
+/* Header */
+/* ============================= */
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* ============================= */
+/* Vídeo */
+/* ============================= */
+
+.videoWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 2rem;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.videoWrapper iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ============================= */
+/* Form */
+/* ============================= */
+
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.input {
+  background-color: white;
+  color: #111827;
+  border: 2px solid #1e3a8a;
+  padding: 0.9rem 1rem;
+  font-size: 1rem;
+  border-radius: 12px;
+  width: 320px;
+  text-align: center;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.sendButton {
+  background-color: #dc2626;
+  color: white;
+  font-weight: 600;
+  padding: 0.9rem 1.6rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.sendButton:hover {
+  background-color: #b91c1c;
+  transform: translateY(-2px);
+}
+
+/* ============================= */
+/* Feedback */
+/* ============================= */
+
+.feedbackBox {
+  width: 100%;
+  max-width: 700px;
+  margin: 40px auto 0;
+  padding: 28px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.feedbackBox h3 {
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  color: #111827;
+}
+
+/* Score Badge */
+
+.feedbackBox strong {
+  background: #1e3a8a;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 1rem;
+}
+
+/* Cards */
+
+.card {
+  margin-top: 18px;
+}
+
+.label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #374151;
+}
+
+.userAnswer {
+  background: #f3f4f6;
+  padding: 12px;
+  border-radius: 10px;
+  color: #111827;
+}
+
+/* Diff */
+
+.diff {
+  line-height: 1.9;
+  font-size: 1rem;
+}
+
+.correct {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.wrong {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.missing {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+/* ============================= */
+/* Actions */
+/* ============================= */
+
+.actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.primaryButton {
+  background-color: #1e3a8a;
+  color: white;
+  font-weight: 600;
+  padding: 0.9rem 1.6rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.primaryButton:hover {
+  background-color: #1e40af;
+  transform: translateY(-2px);
+}
+
+.secondaryButton {
+  background-color: #dc2626;
+  color: white;
+  font-weight: 600;
+  padding: 0.9rem 1.6rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.secondaryButton:hover {
+  background-color: #b91c1c;
+  transform: translateY(-2px);
+}
+
+/* ============================= */
+/* Botão Voltar Melhorado */
+/* ============================= */
+
+.backButton {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  background: white;
+  border: 2px solid #1e3a8a;
+  color: #1e3a8a;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.backButton:hover {
+  background: #1e3a8a;
+  color: white;
+}
+
+/* ============================= */
+
+.timeHint {
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #fff4d6;
+  border: 1px solid #ffd43b;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #8a6d00;
+  text-align: center;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

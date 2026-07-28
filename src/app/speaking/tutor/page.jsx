@@ -20,7 +20,6 @@ export default function SpeakingTutor() {
 
     setInput("");
     setIsLoading(true); // Ativa as 3 bolinhas de carregamento
-
     setMessages((prev) => [...prev, userMessage]);
 
     const hasValidCustomPrompt = useCustomPrompt && customSystemPrompt.trim().length > 0;
@@ -44,54 +43,65 @@ export default function SpeakingTutor() {
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
+      
       let fullText = "";
       let isFirstChunk = true;
+      let buffer = ""; // Buffer para lidar com a fragmentação de rede e pacotes cortados
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
-        const chunk = decoder.decode(value, { stream: true });
+        // Decodifica os bytes recebidos e acumula no buffer
+        buffer += decoder.decode(value, { stream: true });
         
-        // SSE envia mensagens no formato "data: {"chunk":"..."}\n\n"
-        const lines = chunk.split("\n");
-        for (const line of lines) {
-          if (line.startsWith("data:")) {
-            try {
-              const jsonString = line.replace("data:", "").trim();
-              if (!jsonString) continue;
+        // As mensagens SSE são delimitadas por duas quebras de linha (\n\n)
+        const parts = buffer.split("\n\n");
+        
+        // Guardamos o último pedaço no buffer (pode estar incompleto)
+        buffer = parts.pop() || "";
 
-              const parsed = JSON.parse(jsonString);
-              const textChunk = parsed.chunk || parsed.data || "";
+        for (const rawPart of parts) {
+          let cleanPart = rawPart.trim();
+          if (!cleanPart) continue;
 
-              if (!textChunk) continue;
+          // Remove múltiplos "data:" caso o NestJS e Python tenham envelopado
+          while (cleanPart.startsWith("data:")) {
+            cleanPart = cleanPart.slice(5).trim();
+          }
 
-              // No exato momento em que o 1º token chega do backend:
-              if (isFirstChunk) {
-                isFirstChunk = false;
-                setIsLoading(false); // Oculta o indicador de 3 bolinhas
+          if (!cleanPart) continue;
 
-                // Cria o balão de mensagem do tutor com o primeiro pedaço de texto
-                fullText += textChunk;
-                setMessages((prev) => [
-                  ...prev,
-                  { role: "assistant", content: fullText }
-                ]);
-              } else {
-                // Para os tokens seguintes, concatena e atualiza a mensagem na tela
-                fullText += textChunk;
-                setMessages((prev) => {
-                  const updated = [...prev];
-                  updated[updated.length - 1] = {
-                    role: "assistant",
-                    content: fullText,
-                  };
-                  return updated;
-                });
-              }
-            } catch (err) {
-              console.warn("Erro ao processar linha SSE:", err);
+          try {
+            const parsed = JSON.parse(cleanPart);
+            const textChunk = parsed.chunk || parsed.data || "";
+
+            if (!textChunk) continue;
+
+            // No exato momento em que o 1º token chega do backend:
+            if (isFirstChunk) {
+              isFirstChunk = false;
+              setIsLoading(false); // Oculta o indicador de 3 bolinhas
+
+              fullText += textChunk;
+              setMessages((prev) => [
+                ...prev,
+                { role: "assistant", content: fullText }
+              ]);
+            } else {
+              // Para os tokens seguintes, concatena e atualiza a bolha na tela
+              fullText += textChunk;
+              setMessages((prev) => {
+                const updated = [...prev];
+                updated[updated.length - 1] = {
+                  role: "assistant",
+                  content: fullText,
+                };
+                return updated;
+              });
             }
+          } catch (err) {
+            console.warn("Ignorando chunk JSON incompleto ou malformado:", err, cleanPart);
           }
         }
       }

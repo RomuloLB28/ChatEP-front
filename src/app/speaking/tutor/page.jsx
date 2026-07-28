@@ -6,21 +6,22 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function SpeakingTutor() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // Estado para controlar o indicador
+  const [isLoading, setIsLoading] = useState(false); // Controla as 3 bolinhas (TTFT)
 
   const [showMakerPanel, setShowMakerPanel] = useState(false);
   const [useCustomPrompt, setUseCustomPrompt] = useState(false);
   const [customSystemPrompt, setCustomSystemPrompt] = useState("");
 
   async function sendMessage() {
-    if (!input.trim() || isLoading) return; // Evita envios duplos enquanto carrega
+    if (!input.trim() || isLoading) return;
 
     const userMessage = { role: "user", content: input };
-    setMessages((prev) => [...prev, userMessage]);
-    
     const textToSend = input;
+
     setInput("");
-    setIsLoading(true); // Ativa o "typing..."
+    setIsLoading(true); // Ativa as 3 bolinhas de carregamento
+
+    setMessages((prev) => [...prev, userMessage]);
 
     const hasValidCustomPrompt = useCustomPrompt && customSystemPrompt.trim().length > 0;
 
@@ -37,16 +38,73 @@ export default function SpeakingTutor() {
         }),
       });
 
-      const data = await response.json();
+      if (!response.body) {
+        throw new Error("ReadableStream não é suportado pelo navegador.");
+      }
 
-      const botMessage = { role: "assistant", content: data.response || data.reply };
-      setMessages((prev) => [...prev, botMessage]);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let fullText = "";
+      let isFirstChunk = true;
 
-      speak(botMessage.content);
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        
+        // SSE envia mensagens no formato "data: {"chunk":"..."}\n\n"
+        const lines = chunk.split("\n");
+        for (const line of lines) {
+          if (line.startsWith("data:")) {
+            try {
+              const jsonString = line.replace("data:", "").trim();
+              if (!jsonString) continue;
+
+              const parsed = JSON.parse(jsonString);
+              const textChunk = parsed.chunk || parsed.data || "";
+
+              if (!textChunk) continue;
+
+              // No exato momento em que o 1º token chega do backend:
+              if (isFirstChunk) {
+                isFirstChunk = false;
+                setIsLoading(false); // Oculta o indicador de 3 bolinhas
+
+                // Cria o balão de mensagem do tutor com o primeiro pedaço de texto
+                fullText += textChunk;
+                setMessages((prev) => [
+                  ...prev,
+                  { role: "assistant", content: fullText }
+                ]);
+              } else {
+                // Para os tokens seguintes, concatena e atualiza a mensagem na tela
+                fullText += textChunk;
+                setMessages((prev) => {
+                  const updated = [...prev];
+                  updated[updated.length - 1] = {
+                    role: "assistant",
+                    content: fullText,
+                  };
+                  return updated;
+                });
+              }
+            } catch (err) {
+              console.warn("Erro ao processar linha SSE:", err);
+            }
+          }
+        }
+      }
+
+      // Ao finalizar a geração completa, executa o Text-To-Speech
+      if (fullText) {
+        speak(fullText);
+      }
+
     } catch (error) {
       console.error("Erro ao conversar:", error);
     } finally {
-      setIsLoading(false); // Desativa o "typing..." terminando com sucesso ou erro
+      setIsLoading(false); // Garante a desativação do estado de carregamento em caso de erro
     }
   }
 
@@ -141,7 +199,7 @@ export default function SpeakingTutor() {
           </div>
         ))}
 
-        {/* Indicador de Digitação (Typing Indicator) */}
+        {/* Exibido estritamente no intervalo entre a requisição e a chegada do 1º token */}
         {isLoading && (
           <div className={`${styles.message} ${styles.tutor} ${styles.typingIndicator}`}>
             <span></span>

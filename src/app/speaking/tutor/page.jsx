@@ -6,19 +6,21 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export default function SpeakingTutor() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Estado para controlar o indicador
 
   const [showMakerPanel, setShowMakerPanel] = useState(false);
   const [useCustomPrompt, setUseCustomPrompt] = useState(false);
   const [customSystemPrompt, setCustomSystemPrompt] = useState("");
 
   async function sendMessage() {
-    if (!input.trim()) return;
+    if (!input.trim() || isLoading) return; // Evita envios duplos enquanto carrega
 
     const userMessage = { role: "user", content: input };
     setMessages((prev) => [...prev, userMessage]);
     
     const textToSend = input;
     setInput("");
+    setIsLoading(true); // Ativa o "typing..."
 
     const hasValidCustomPrompt = useCustomPrompt && customSystemPrompt.trim().length > 0;
 
@@ -43,6 +45,8 @@ export default function SpeakingTutor() {
       speak(botMessage.content);
     } catch (error) {
       console.error("Erro ao conversar:", error);
+    } finally {
+      setIsLoading(false); // Desativa o "typing..." terminando com sucesso ou erro
     }
   }
 
@@ -136,6 +140,15 @@ export default function SpeakingTutor() {
             {msg.content}
           </div>
         ))}
+
+        {/* Indicador de Digitação (Typing Indicator) */}
+        {isLoading && (
+          <div className={`${styles.message} ${styles.tutor} ${styles.typingIndicator}`}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        )}
       </div>
 
       <div className={styles.inputContainer}>
@@ -146,8 +159,9 @@ export default function SpeakingTutor() {
           onKeyDown={handleKeyDown}
           placeholder="Type your message..."
           className={styles.input}
+          disabled={isLoading}
         />
-        <button onClick={sendMessage} className={styles.button}>
+        <button onClick={sendMessage} className={styles.button} disabled={isLoading}>
           Send
         </button>
       </div>

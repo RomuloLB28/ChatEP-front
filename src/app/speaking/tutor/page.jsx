@@ -52,56 +52,50 @@ export default function SpeakingTutor() {
         const { done, value } = await reader.read();
         if (done) break;
 
-        // Decodifica os bytes recebidos e acumula no buffer
         buffer += decoder.decode(value, { stream: true });
-        
-        // As mensagens SSE são delimitadas por duas quebras de linha (\n\n)
         const parts = buffer.split("\n\n");
-        
-        // Guardamos o último pedaço no buffer (pode estar incompleto)
         buffer = parts.pop() || "";
 
         for (const rawPart of parts) {
-          let cleanPart = rawPart.trim();
-          if (!cleanPart) continue;
+          const lines = rawPart.split("\n");
+          
+          for (let line of lines) {
+            line = line.trim();
+            
+            // O NestJS envia "data: {"chunk": "..."}"
+            if (line.startsWith("data:")) {
+              const jsonStr = line.replace(/^data:\s*/, "").trim();
+              if (!jsonStr) continue;
 
-          // Remove múltiplos "data:" caso o NestJS e Python tenham envelopado
-          while (cleanPart.startsWith("data:")) {
-            cleanPart = cleanPart.slice(5).trim();
-          }
+              try {
+                const parsed = JSON.parse(jsonStr);
+                const textChunk = parsed.chunk || parsed.data || "";
 
-          if (!cleanPart) continue;
+                if (!textChunk) continue;
 
-          try {
-            const parsed = JSON.parse(cleanPart);
-            const textChunk = parsed.chunk || parsed.data || "";
-
-            if (!textChunk) continue;
-
-            // No exato momento em que o 1º token chega do backend:
-            if (isFirstChunk) {
-              isFirstChunk = false;
-              setIsLoading(false); // Oculta o indicador de 3 bolinhas
-
-              fullText += textChunk;
-              setMessages((prev) => [
-                ...prev,
-                { role: "assistant", content: fullText }
-              ]);
-            } else {
-              // Para os tokens seguintes, concatena e atualiza a bolha na tela
-              fullText += textChunk;
-              setMessages((prev) => {
-                const updated = [...prev];
-                updated[updated.length - 1] = {
-                  role: "assistant",
-                  content: fullText,
-                };
-                return updated;
-              });
+                if (isFirstChunk) {
+                  isFirstChunk = false;
+                  setIsLoading(false);
+                  fullText += textChunk;
+                  setMessages((prev) => [
+                    ...prev,
+                    { role: "assistant", content: fullText }
+                  ]);
+                } else {
+                  fullText += textChunk;
+                  setMessages((prev) => {
+                    const updated = [...prev];
+                    updated[updated.length - 1] = {
+                      role: "assistant",
+                      content: fullText,
+                    };
+                    return updated;
+                  });
+                }
+              } catch (err) {
+                // Ignora linhas que não são JSON
+              }
             }
-          } catch (err) {
-            console.warn("Ignorando chunk JSON incompleto ou malformado:", err, cleanPart);
           }
         }
       }

@@ -175,7 +175,7 @@ export default function Home() {
           </div>
 
           <p className={styles.footerCopy}>
-            © 2025 ChatEP. Todos os direitos reservados.
+            © 2025-2026 ChatEP. Todos os direitos reservados.
           </p>
         </div>
       </footer>

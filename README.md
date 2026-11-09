@@ -144,4 +144,7 @@ Rodapé da plataforma com links de navegação, acesso às redes de contato e te
 ## Link para o Backend:
 https://github.com/RomuloLB28/chatep-back
 
+## Link para o artigo do projeto:
+https://sol.sbc.org.br/index.php/ideia/article/view/43456
+
 ```

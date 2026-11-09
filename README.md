@@ -147,4 +147,3 @@ https://github.com/RomuloLB28/chatep-back
 ## Link para o artigo do projeto:
 https://sol.sbc.org.br/index.php/ideia/article/view/43456
 
-```
